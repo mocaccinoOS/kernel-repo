@@ -1,0 +1,51 @@
+name: Build
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        git fetch --prune --unshallow
+    - name: setup-docker
+      uses: docker-practice/actions-setup-docker@0.0.1
+    # https://github.community/t/worker-running-out-of-disk-space/18245
+    - name: Patch Docker Daemon data-root
+      run: |
+        DOCKER_DATA_ROOT='/mnt/var/lib/docker'
+        DOCKER_DAEMON_JSON='/etc/docker/daemon.json'
+        sudo mkdir -p "${DOCKER_DATA_ROOT}"
+        jq --arg dataroot "${DOCKER_DATA_ROOT}" '. + {"data-root": $dataroot}' "${DOCKER_DAEMON_JSON}" > "/tmp/docker.json.tmp"
+        sudo mv "/tmp/docker.json.tmp" "${DOCKER_DAEMON_JSON}"
+        sudo systemctl restart docker
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.14.3' # The Go version to download (if necessary) and use.
+    - name: Login to DockerHub Registry
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      run: echo ${{ secrets.DOCKERIO_PASSWORD }} | docker login -u ${{ secrets.DOCKERIO_USERNAME }} --password-stdin
+    - name: Set Push options
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      run: echo ::set-env name=BUILD_ARGS::--pull --push --image-repository mocaccinoos/kernel-amd64-cache
+    - name: Install deps
+      run: |
+        curl https://gist.githubusercontent.com/mudler/8b8d6c53c4669f4b9f9a72d1a2b92172/raw/e9d38b8e0702e7f1ef9a5db1bfa428add12a2d24/get_luet_root.sh | sudo sh
+        sudo luet install system/container-diff system/luet-extensions repository/mocaccino-extra
+        sudo luet install utils/keybase-tools utils/jq
+    - name: Build 🔧
+      run: |
+        make build-all create-repo
+    - name: Deploy 🚀
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      run: |
+        keybase-deploy $PWD/build /keybase/public/mocaccino/kernel-repo
+      env:
+        KEYBASE_DEVICENAME: ${{ secrets.KEYBASE_DEVICENAME }}
+        KEYBASE_PAPERKEY: ${{ secrets.KEYBASE_PAPERKEY }}
+        KEYBASE_USERNAME: ${{ secrets.KEYBASE_USERNAME }}
