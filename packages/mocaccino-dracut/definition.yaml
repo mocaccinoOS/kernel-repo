@@ -1,0 +1,7 @@
+name: mocaccino-dracut
+category: sys-kernel
+version: "1.0"
+requires:
+- name: dracut
+  category: sys-kernel
+  version: ">=0"
