@@ -1,4 +1,4 @@
 requires:
-- category: "sys-kernel-5.4"
+- category: "kernel-5.4"
   name: "sabayon-full"
   version: ">=0"

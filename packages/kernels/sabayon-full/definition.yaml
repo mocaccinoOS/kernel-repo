@@ -1,4 +1,8 @@
 category: "kernel"
 name: "sabayon-full"
-version: "5.4"
+version: "5.4+1"
 description: "Sabayon Stable Kernel"
+requires:
+- category: "kernel-5.4"
+  name: "sabayon-full"
+  version: ">=0"
