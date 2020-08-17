@@ -1,3 +1,7 @@
 category: "kernel"
 name: "sabayon-minimal"
-version: "5.4+1"
+version: "5.4+2"
+requires:
+- category: "kernel-5.4"
+  name: "sabayon-minimal"
+  version: ">=0"
