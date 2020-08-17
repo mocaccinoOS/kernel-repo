@@ -13,6 +13,7 @@ export TREE?=$(ROOT_DIR)/packages
 BUILD_ARGS?=-d --image-repository mocaccinoos/kernel-repo-amd64-cache
 SUDO?=
 VALIDATE_OPTIONS?=-s
+export LUET_CONFIG?=conf/luet.yaml
 
 .PHONY: all
 all: deps build
