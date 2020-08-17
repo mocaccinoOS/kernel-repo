@@ -1,5 +1,6 @@
 image: "quay.io/mocaccino/micro:master"
 
+package_dir: /mocaccino-dracut
 steps:
 - | 
    PACKAGE_VERSION=${PACKAGE_VERSION%\+*} && \
