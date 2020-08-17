@@ -33,6 +33,7 @@ includes:
 
 image: sabayon/base-amd64
 prelude:
+- chmod a+x ./override_mirror.sh && ./override_mirror.sh
 - equo up
 steps:
 - ACCEPT_LICENSE=* equo i sys-kernel/linux-sabayon:${PACKAGE_CATEGORY/kernel-/}
