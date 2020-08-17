@@ -4,10 +4,11 @@ includes:
 - /boot$|/boot/.*
 - /lib$
 - /lib/firmware$|/lib/firmware/.*
-- /lib/modules$|/lib/modules/.*
+- /lib/modules$
+- /lib/modules/5.4.0-sabayon/.*
 - /lib/modprobe.d$|/lib/modprobe.d/.*
 image: sabayon/base-amd64
 prelude:
 - equo up
 steps:
-- ACCEPT_LICENSE=* equo i sys-kernel/linux-sabayon:${PACKAGE_VERSION}
+- ACCEPT_LICENSE=* equo i sys-kernel/linux-sabayon:${PACKAGE_CATEGORY/sys-kernel-/}
