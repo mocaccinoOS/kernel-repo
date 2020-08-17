@@ -1,38 +1,4 @@
-# This kernel package is a minimal spec with kernel + overlayfs modules to allow mounting overlays from livecd
-unpack: true
-includes:
-# Kernel
-- /boot$|/boot/.*
-- /lib$
-- /lib/modules$
-- /lib/modules/.*-sabayon$
-- /lib/modules/.*-sabayon/modules.*
-- /lib/modules/.*-sabayon/source
-- /lib/modules/.*-sabayon/build
-
-# OverlayFS
-- /lib/modules/.*-sabayon/kernel$
-- /lib/modules/.*-sabayon/kernel/fs$
-- /lib/modules/.*-sabayon/kernel/fs/mbcache.ko
-- /lib/modules/.*-sabayon/kernel/fs/overlayfs$
-- /lib/modules/.*-sabayon/kernel/fs/overlayfs/.*
-- /lib/modules/.*-sabayon/kernel/lib$
-- /lib/modules/.*-sabayon/kernel/lib/.*
-
-# USB
-- /lib/modules/.*-sabayon/kernel$
-- /lib/modules/.*-sabayon/kernel/drivers$
-- /lib/modules/.*-sabayon/kernel/drivers/usb$
-- /lib/modules/.*-sabayon/kernel/drivers/usb/.*
-- /lib/modules/.*-sabayon/kernel/drivers/usb/storage$
-- /lib/modules/.*-sabayon/kernel/drivers/usb/storage/.*
-- /lib/modules/.*-sabayon/kernel/drivers/usb/host$
-- /lib/modules/.*-sabayon/kernel/drivers/usb/host/.*
-- /lib/modules/.*-sabayon/kernel/drivers/usb/common$
-- /lib/modules/.*-sabayon/kernel/drivers/usb/common/.*
-
-image: sabayon/base-amd64
-prelude:
-- equo up
-steps:
-- ACCEPT_LICENSE=* equo i sys-kernel/linux-sabayon:${PACKAGE_VERSION}
+requires:
+- category: "sys-kernel-5.4"
+  name: "sabayon-minimal"
+  version: ">=0"
