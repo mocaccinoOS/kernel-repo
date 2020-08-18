@@ -1,6 +1,6 @@
 category: "kernel"
 name: "linux-firmware-funtoo"
-version: "20200421+1"
+version: "20200421+2"
 provides:
 - category: "kernel"
   name: "linux-firmware"

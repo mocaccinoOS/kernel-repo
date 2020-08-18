@@ -9,9 +9,11 @@ prelude:
 steps:
 - emerge --nodeps -t sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo/}
 - quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo/}
+- mkdir /${PACKAGE_NAME}
 - mkdir -p /tmp/data
 - qtbz2 -d /tmp/data/ /var/cache/portage/packages/sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo/}-${PACKAGE_VERSION%\+*}.tbz2
 
 - tar xvjf /tmp/data/${PACKAGE_NAME/-funtoo/}-${PACKAGE_VERSION%\+*}.tar.bz2 -C /${PACKAGE_NAME}
 # Drop portage savedconfig
 - rm -rf /${PACKAGE_NAME}/etc
+- rm -rf /tmp/data
