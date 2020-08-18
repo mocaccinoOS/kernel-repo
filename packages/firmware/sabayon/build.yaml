@@ -1,4 +1,6 @@
 image: "sabayon/base"
+env:
+- ACCEPT_LICENSE=*
 prelude:
 - chmod a+x ./override_mirror.sh && ./override_mirror.sh
 - equo up

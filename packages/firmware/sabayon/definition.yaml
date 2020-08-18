@@ -1,6 +1,6 @@
 category: "kernel"
 name: "linux-firmware-sabayon"
-version: "20200619+1"
+version: "20200619+2"
 provides:
 - category: "kernel"
   name: "linux-firmware"
