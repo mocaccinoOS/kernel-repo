@@ -1,18 +1,17 @@
 image: "funtoo/stage3-generic_64:2020-07-06"
-package_dir: /linux-firmware
+package_dir: /linux-firmware-funtoo
 env:
 - JOBS=3
 prelude:
-- eqo sync
+- ego sync
 - epro list
-- emerge -j ${JOBS} --onlydeps sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME}
+- emerge -j ${JOBS} --onlydeps sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo/}
 steps:
-- emerge --nodeps -t sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME}
-- quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME}
+- emerge --nodeps -t sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo/}
+- quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo/}
 - mkdir -p /tmp/data
-- qtbz2 -d /tmp/data/ /var/cache/portage/packages/sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2
+- qtbz2 -d /tmp/data/ /var/cache/portage/packages/sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo/}-${PACKAGE_VERSION%\+*}.tbz2
 
-- tar xvjf /tmp/data/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tar.bz2 -C /${PACKAGE_NAME}
+- tar xvjf /tmp/data/${PACKAGE_NAME/-funtoo/}-${PACKAGE_VERSION%\+*}.tar.bz2 -C /${PACKAGE_NAME}
 # Drop portage savedconfig
 - rm -rf /${PACKAGE_NAME}/etc
-
