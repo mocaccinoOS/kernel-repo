@@ -1,0 +1,11 @@
+category: "kernel"
+name: "linux-firmware-sabayon"
+version: "20200619"
+provides:
+- category: "kernel"
+  name: "linux-firmware"
+  version: "20200619"
+conflicts:
+- category: "kernel"
+  name: "linux-firmware-funtoo"
+  version: ">=0"
