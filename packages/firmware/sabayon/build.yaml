@@ -2,8 +2,8 @@ image: "sabayon/base"
 prelude:
 - chmod a+x ./override_mirror.sh && ./override_mirror.sh
 - equo up
-- equo i --onlydeps sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-sabayon}-${PACKAGE_VERSION%\+*}
+- equo i --onlydeps sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-sabayon/}-${PACKAGE_VERSION%\+*}
 steps:
-- equo i --nodeps sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-sabayon}-${PACKAGE_VERSION%\+*}
+- equo i --nodeps sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-sabayon/}-${PACKAGE_VERSION%\+*}
 - eval 'rm /var/log/entropy.log || true'
 - rm ./override_mirror.sh
