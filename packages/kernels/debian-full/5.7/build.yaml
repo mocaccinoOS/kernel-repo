@@ -1,9 +1,9 @@
 image: "debian:bullseye"
 package_dir: /debian-full
 prelude:
-- apt-get update && apt-get upgrade
+- apt-get update && apt-get -y upgrade
 steps:
-- apt-get install linux-image-amd64
+- apt-get -y install linux-image-amd64
 - mkdir -p /${PACKAGE_NAME}/boot
 - cp -vrf /boot/* /${PACKAGE_NAME}/
 - mkdir -p /${PACKAGE_NAME}/lib/modules/
