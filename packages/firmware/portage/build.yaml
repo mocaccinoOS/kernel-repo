@@ -4,7 +4,7 @@ requires:
   version: ">=0"
 package_dir: /linux-firmware-funtoo-portage
 steps:
-- quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-portage/}
+- quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo-portage/}
 - mkdir -p /tmp/data
 - mkdir /${PACKAGE_NAME}
 - qtbz2 -d /tmp/data/ /var/cache/portage/packages/sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo-portage/}-${PACKAGE_VERSION%\+*}.tbz2
