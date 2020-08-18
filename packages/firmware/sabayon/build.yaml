@@ -5,7 +5,9 @@ prelude:
 - chmod a+x ./override_mirror.sh && ./override_mirror.sh
 - equo up
 - equo i --onlydeps sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-sabayon/}-${PACKAGE_VERSION%\+*}
+- equo cleanup
 steps:
 - equo i --nodeps sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-sabayon/}-${PACKAGE_VERSION%\+*}
+- equo cleanup
 - eval 'rm /var/log/entropy.log || true'
 - rm ./override_mirror.sh
