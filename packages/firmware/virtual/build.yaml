@@ -1,1 +1,2 @@
-# Empty build
+# Empty build. Temporary workaround until we will implement virtual pkg support.
+image: "alpine"
