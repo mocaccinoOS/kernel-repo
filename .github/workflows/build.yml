@@ -38,14 +38,26 @@ jobs:
         curl https://gist.githubusercontent.com/mudler/8b8d6c53c4669f4b9f9a72d1a2b92172/raw/e9d38b8e0702e7f1ef9a5db1bfa428add12a2d24/get_luet_root.sh | sudo sh
         sudo luet install system/container-diff system/luet-extensions repository/mocaccino-extra
         sudo luet install utils/keybase-tools utils/jq
+    - name: Install minio and login
+      env:
+        MINIO_API_URL: ${{ secrets.MINIO_API_URL }}
+        MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+        MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+      run: |
+        sudo wget https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/bin/mc
+        sudo chmod +x /usr/bin/mc
+        mc alias set minio $MINIO_API_URL $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+    - name: Get existing repository metadata
+      run: |
+        mkdir $PWD/build
+        chmod -R 777 $PWD/build
+        mc mirror  --exclude '*.gz' minio/mocaccino-kernel/ $PWD/build
+        ls -liah $PWD/build
     - name: Build 🔧
       run: |
-        make build-all create-repo
-    - name: Deploy 🚀
+        make rebuild-all create-repo
+    - name: Update repository 🚀
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: |
-        keybase-deploy $PWD/build /keybase/public/mocaccino/kernel-repo
-      env:
-        KEYBASE_DEVICENAME: ${{ secrets.KEYBASE_DEVICENAME }}
-        KEYBASE_PAPERKEY: ${{ secrets.KEYBASE_PAPERKEY }}
-        KEYBASE_USERNAME: ${{ secrets.KEYBASE_USERNAME }}
+        mc cp --recursive $PWD/build/ minio/mocaccino-kernel
+
