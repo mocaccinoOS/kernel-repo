@@ -1,0 +1,22 @@
+unpack: true
+includes:
+# Kernel
+- /boot$|/boot/.*
+- /lib$
+- /lib/modules$
+- /lib/modules/5.8.0-sabayon/.*
+- /lib/modprobe.d$|/lib/modprobe.d/.*
+image: sabayon/base-amd64
+env:
+- ACCEPT_LICENSE=*
+- LC_ALL=en_US.UTF-8
+prelude:
+- chmod a+x ./override_mirror.sh && ./override_mirror.sh
+- equo up
+- equo i sys-kernel/linux-sabayon --onlydeps
+# Prepare emerge stuff
+- layman -S
+- mkdir -p /usr/portage/profiles && rsync -av -H -A -X --delete-during steps "rsync://rsync.at.gentoo.org/gentoo-portage/profiles/" /usr/portage/profiles
+- eselect profile set "default/linux/amd64/17.1/desktop"
+steps:
+- source /etc/profile && emerge sys-kernel/linux-sabayon:${PACKAGE_CATEGORY/kernel-/}
