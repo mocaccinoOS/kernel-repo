@@ -13,6 +13,7 @@ env:
 prelude:
 - chmod a+x ./override_mirror.sh && ./override_mirror.sh
 - equo up
+- equo i app-portage/layman
 - equo i sys-kernel/linux-sabayon --onlydeps
 # Prepare emerge stuff
 - layman -S
