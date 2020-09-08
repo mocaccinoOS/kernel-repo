@@ -73,24 +73,22 @@ jobs:
       run: |
         curl https://gist.githubusercontent.com/mudler/8b8d6c53c4669f4b9f9a72d1a2b92172/raw/e9d38b8e0702e7f1ef9a5db1bfa428add12a2d24/get_luet_root.sh | sudo sh
         sudo luet install system/container-diff system/luet-extensions repository/mocaccino-extra
-        sudo luet install utils/keybase-tools utils/jq
+        sudo luet install utils/keybase-tools utils/jq net-fs/minio-client
 
-    - name: Install minio and login
+    - name: Setup minio alias
       env:
         MINIO_API_URL: ${{ secrets.MINIO_API_URL }}
         MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
         MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
       run: |
-        sudo wget https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/bin/mc
-        sudo chmod +x /usr/bin/mc
         mc alias set minio $MINIO_API_URL $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
-        ls -liah $PWD/build
 
     - name: Get existing repository metadata
       run: |
         mkdir $PWD/build
         chmod -R 777 $PWD/build
-        mc mirror  --exclude '*.gz' minio/mocaccino-kernel/ $PWD/build
+        ls -liah $PWD/build
+        mc mirror  --debug --exclude '*.gz' minio/mocaccino-kernel/ $PWD/build
         ls -liah $PWD/build
 
     - name: Build packages 🔧
@@ -129,17 +127,15 @@ jobs:
         PREVIOUS: ${{ github.event.before }}
       run: |
         curl https://gist.githubusercontent.com/mudler/8b8d6c53c4669f4b9f9a72d1a2b92172/raw/e9d38b8e0702e7f1ef9a5db1bfa428add12a2d24/get_luet_root.sh | sudo sh
-        sudo luet install system/container-diff system/luet-extensions
-        sudo luet install utils/keybase-tools
+        sudo luet install system/container-diff system/luet-extensions repository/mocaccino-extra
+        sudo luet install utils/keybase-tools net-fs/minio-client
 
-    - name: Install minio and login
+    - name: Setup minio alias
       env:
         MINIO_API_URL: ${{ secrets.MINIO_API_URL }}
         MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
         MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
       run: |
-        sudo wget https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/bin/mc
-        sudo chmod +x /usr/bin/mc
         mc alias set minio $MINIO_API_URL $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 
     - name: Get existing repository metadata
