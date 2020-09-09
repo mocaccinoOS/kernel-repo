@@ -93,7 +93,7 @@ jobs:
 
     - name: Build packages 🔧
       env:
-        BUILD_ARGS: "--pull --push --image-repository mocaccinoos/kernel-amd64-cache --skip-if-metadata-exists=true"
+        BUILD_ARGS: "--pull --push --image-repository mocaccinoos/kernel-amd64-cache --skip-if-metadata-exists=true --config conf/luet.yaml"
         CLEAN: "false"
         TARGET: "target"
         PACKAGES: ${{ matrix.category }}/${{ matrix.name }}
