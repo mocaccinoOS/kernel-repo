@@ -13,4 +13,4 @@ pkg = $mirror/entropy
 " > /etc/entropy/repositories.conf.d/entropy_$repo
 }
 
-force_single_mirror "http://sabayonlinux.mirror.garr.it/sabayonlinux"
+force_single_mirror "http://sabayonlinux.mirror.garr.it/sabayon"
