@@ -1,0 +1,24 @@
+requires:
+- category: "kernel-5.8"
+  name: "sabayon-sources"
+  version: ">=0"
+package_dir: /zfs-kmod
+env:
+- ACCEPT_LICENSE=*
+- LC_ALL=en_US.UTF-8
+prelude:
+- chmod a+x ./override_mirror.sh && ./override_mirror.sh
+# Ensure that sources is in a good state
+- cd /usr/src/ && ls -l && rm linux && ln -s linux-5.8.0-sabayon linux
+- cd /usr/src/linux && make mrproper && cp sabayon/config/sabayon-amd64.config .config && make prepare-modules
+steps:
+- |
+  source /etc/profile && emerge =sys-fs/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
+- quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME}
+- mkdir /${PACKAGE_NAME}
+- mkdir -p /tmp/data
+- qtbz2 -d /tmp/data/ /var/cache/portage/packages/sys-fs/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2
+
+- tar xvjf /tmp/data/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tar.bz2 -C /${PACKAGE_NAME}
+- rm -rf /tmp/data
+
