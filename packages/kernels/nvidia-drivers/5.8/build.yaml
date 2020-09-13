@@ -7,28 +7,16 @@ env:
 - ACCEPT_LICENSE=*
 - LC_ALL=en_US.UTF-8
 prelude:
-- chmod a+x ./override_mirror.sh && ./override_mirror.sh
-- equo up
-- equo i app-portage/layman dev-vcs/git sys-devel/gcc
-- equo i sys-kernel/linux-sabayon sys-kernel/sabayon-sources --onlydeps
-- equo cleanup
-# Prepare emerge stuff
-- emerge-webrsync
-- layman -f && eval 'echo "y" | layman -f -a sabayon' && eval 'echo "y" | layman -a sabayon-distro'
-- eselect profile set "default/linux/amd64/17.1/desktop"
-- gcc-config x86_64-pc-linux-gnu-8.2.0
 # Ensure that sources is in a good state
 - cd /usr/src/ && ls -l && rm linux && ln -s linux-5.8.0-sabayon linux
 - cd /usr/src/linux && make mrproper && cp sabayon/config/sabayon-amd64.config .config && make prepare-modules
 steps:
 - |
   source /etc/profile && emerge =sys-kernel/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
-- quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo/}
-- mkdir /${PACKAGE_NAME}
-- mkdir -p /tmp/data
-- qtbz2 -d /tmp/data/ /var/cache/portage/packages/x11-drivers/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2
-
-- tar xvjf /tmp/data/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tar.bz2 -C /${PACKAGE_NAME}
-- rm -rf /tmp/data
+  quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo/} && \
+  mkdir /${PACKAGE_NAME} && mkdir -p /tmp/data && \
+  qtbz2 -d /tmp/data/ /var/cache/portage/packages/x11-drivers/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2 && \
+  tar xvjf /tmp/data/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tar.bz2 -C /${PACKAGE_NAME} && \
+  rm -rf /tmp/data
 # TODO: drop nvidia-userspace stuff
 
