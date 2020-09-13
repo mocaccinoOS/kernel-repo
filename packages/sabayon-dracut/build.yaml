@@ -7,6 +7,6 @@ steps:
    mkdir -p /${PACKAGE_NAME}/usr/bin && \
    cp -rfv sabayon-dracut  /${PACKAGE_NAME}/usr/bin/ && \
    chmod +x /${PACKAGE_NAME}/usr/bin/sabayon-dracut && \
-   mkdir -p /${PACKAGE_NAME}/etc/dracut.conf.d/ &&
+   mkdir -p /${PACKAGE_NAME}/etc/dracut.conf.d/ && \
    cp sabayon.conf /${PACKAGE_NAME}/etc/dracut.conf.d/99-sabayon.conf
 
