@@ -1,10 +1,10 @@
 category: "kernel"
 name: "linux-firmware-funtoo"
-version: "20200421+2"
+version: "20200817"
 provides:
 - category: "kernel"
   name: "linux-firmware"
-  version: "20200421"
+  version: "20200817"
 conflicts:
 - category: "kernel"
   name: "linux-firmware-sabayon"
