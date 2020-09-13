@@ -22,7 +22,7 @@ prelude:
 - cd /usr/src/linux && make mrproper && cp sabayon/config/sabayon-amd64.config .config && make prepare-modules
 steps:
 - |
-  source /etc/profile && emerge sys-kernel/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
+  source /etc/profile && emerge =sys-kernel/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
 - quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME/-funtoo/}
 - mkdir /${PACKAGE_NAME}
 - mkdir -p /tmp/data
