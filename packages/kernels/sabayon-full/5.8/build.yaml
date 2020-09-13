@@ -4,6 +4,7 @@ includes:
 - /boot$|/boot/.*
 - /lib$
 - /lib/modules$
+- /lib/modules/5.8.0-sabayon$
 - /lib/modules/5.8.0-sabayon/.*
 - /lib/modprobe.d$|/lib/modprobe.d/.*
 image: sabayon/base-amd64
