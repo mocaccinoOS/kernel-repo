@@ -3,3 +3,4 @@ general:
 
   # spinner every 30m
   spinner_ms: 1800000
+  spinner_charset: 31
