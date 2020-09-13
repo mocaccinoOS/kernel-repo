@@ -17,6 +17,6 @@ prelude:
 - gcc-config x86_64-pc-linux-gnu-8.2.0
 steps:
 - |
-  source /etc/profile && emerge sys-kernel/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
+  source /etc/profile && emerge =sys-kernel/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
   mkdir -p ${PACKAGE_NAME}/usr/src && \
   cp -rfa /usr/src/linux-5.8.0-sabayon/ /${PACKAGE_NAME}/usr/src
