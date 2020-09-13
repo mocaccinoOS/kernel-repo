@@ -18,5 +18,6 @@ prelude:
 steps:
 - |
   source /etc/profile && emerge =sys-kernel/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
+  ls -l /usr/src && \
   mkdir -p ${PACKAGE_NAME}/usr/src && \
-  cp -rfa /usr/src/linux-5.8.0-sabayon/ /${PACKAGE_NAME}/usr/src
+  cp -rfa /usr/src/linux-5.8.0-sabayon/ /${PACKAGE_NAME}/usr/src/
