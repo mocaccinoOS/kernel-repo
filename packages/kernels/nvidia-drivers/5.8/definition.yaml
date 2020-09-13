@@ -1,6 +1,6 @@
 category: "kernel-5.8"
 name: "nvidia-drivers"
-version: "450.66"
+version: "450.66+1"
 requires:
 - category: "kernel-5.8"
   name: "sabayon-full"
