@@ -11,6 +11,7 @@ includes:
 env:
 - ACCEPT_LICENSE=*
 - LC_ALL=en_US.UTF-8
+- JOBS=3
 prelude:
 # Require /usr/include/X11/Xlibint.h -> libX11
 #         /usr/include/X11/extensions/Xext.h -> libXext
@@ -30,7 +31,7 @@ prelude:
 steps:
 - |
   source /etc/profile  && \
-  cd /usr/src/linux && make -j modules && \
+  cd /usr/src/linux && make -j $JOBS modules && \
   emerge =x11-drivers/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
   make clean && \
   quickpkg x11-drivers/${PACKAGE_NAME} && \
