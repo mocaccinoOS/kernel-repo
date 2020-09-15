@@ -3,16 +3,26 @@ requires:
   name: "sabayon-sources"
   version: ">=0"
 package_dir: /zfs-kmod
+includes:
+- /lib$|/lib/modules$
+- /lib/modules/.*
 env:
 - ACCEPT_LICENSE=*
 - LC_ALL=en_US.UTF-8
+- JOBS=3
 prelude:
+- |
+  equo i sys-fs/zfs-kmod --onlydeps --relaxed && \
+  equo cleanup
 # Ensure that sources are in a good status
 - cd /usr/src/ && ls -l && rm linux && ln -s linux-5.8.0-sabayon linux
-- cd /usr/src/linux && make mrproper && cp sabayon/config/sabayon-amd64.config .config && make prepare-modules
+- cd /usr/src/linux && make mrproper && cp sabayon/config/sabayon-amd64.config .config && make prepare
 steps:
 - |
-  source /etc/profile && emerge =sys-fs/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
+  source /etc/profile && \
+  cd /usr/src/linux && make -j $JOBS modules && \
+  emerge =sys-fs/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} --nodeps && \
+  make clean && \
   quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME} && \
   mkdir /${PACKAGE_NAME} && mkdir -p /tmp/data && \
   qtbz2 -d /tmp/data/ /var/cache/portage/packages/sys-fs/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2 && \
