@@ -10,6 +10,7 @@ env:
 - ACCEPT_LICENSE=*
 - LC_ALL=en_US.UTF-8
 - JOBS=3
+- PKGDIR=/usr/portage/packages
 prelude:
 - |
   equo i sys-fs/zfs-kmod --onlydeps --relaxed && \
@@ -25,7 +26,7 @@ steps:
   make clean && \
   quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME} && \
   mkdir /${PACKAGE_NAME} && mkdir -p /tmp/data && \
-  qtbz2 -d /tmp/data/ /var/cache/portage/packages/sys-fs/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2 && \
+  qtbz2 -d /tmp/data/ ${PKGDIR}/sys-fs/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2 && \
   tar xvjf /tmp/data/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tar.bz2 -C /${PACKAGE_NAME} && \
   rm -rf /tmp/data
 
