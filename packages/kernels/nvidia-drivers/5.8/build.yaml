@@ -12,6 +12,7 @@ env:
 - ACCEPT_LICENSE=*
 - LC_ALL=en_US.UTF-8
 - JOBS=3
+- PKGDIR=/usr/portage/packages
 prelude:
 # Require /usr/include/X11/Xlibint.h -> libX11
 #         /usr/include/X11/extensions/Xext.h -> libXext
@@ -36,7 +37,7 @@ steps:
   make clean && \
   quickpkg x11-drivers/${PACKAGE_NAME} && \
   mkdir /${PACKAGE_NAME} && mkdir -p /tmp/data && \
-  qtbz2 -d /tmp/data/ /var/cache/portage/packages/x11-drivers/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2 && \
+  qtbz2 -d /tmp/data/ ${PKGDIR}/x11-drivers/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2 && \
   tar xvjf /tmp/data/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tar.bz2 -C /${PACKAGE_NAME} && \
   rm -rf /tmp/data
 # TODO: drop nvidia-userspace stuff
