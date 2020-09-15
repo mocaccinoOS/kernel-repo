@@ -24,7 +24,7 @@ steps:
   cd /usr/src/linux && make -j $JOBS modules && \
   emerge =sys-fs/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} --nodeps && \
   make clean && \
-  quickpkg sys-${PACKAGE_CATEGORY}/${PACKAGE_NAME} && \
+  quickpkg sys-fs/${PACKAGE_NAME} && \
   mkdir /${PACKAGE_NAME} && mkdir -p /tmp/data && \
   qtbz2 -d /tmp/data/ ${PKGDIR}/sys-fs/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2 && \
   tar xvjf /tmp/data/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tar.bz2 -C /${PACKAGE_NAME} && \
