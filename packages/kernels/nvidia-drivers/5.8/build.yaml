@@ -32,7 +32,7 @@ steps:
 - |
   source /etc/profile  && \
   cd /usr/src/linux && make -j $JOBS modules && \
-  emerge =x11-drivers/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
+  emerge =x11-drivers/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} --nodeps && \
   make clean && \
   quickpkg x11-drivers/${PACKAGE_NAME} && \
   mkdir /${PACKAGE_NAME} && mkdir -p /tmp/data && \
