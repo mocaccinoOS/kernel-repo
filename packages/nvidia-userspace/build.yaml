@@ -1,0 +1,21 @@
+requires:
+package_dir: /nvidia-userspace
+env:
+- ACCEPT_LICENSE=*
+- LC_ALL=en_US.UTF-8
+- JOBS=3
+- PKGDIR=/usr/portage/packages
+prelude:
+- |
+  equo i x11-drivers/nvidia-username --onlydeps --relaxed && \
+  equo remove x11-drivers/nvidia-userspace && \
+  equo cleanup
+steps:
+- |
+  source /etc/profile  && \
+  emerge =x11-drivers/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
+  quickpkg x11-drivers/${PACKAGE_NAME} && \
+  mkdir /${PACKAGE_NAME} && mkdir -p /tmp/data && \
+  qtbz2 -d /tmp/data/ ${PKGDIR}/x11-drivers/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2 && \
+  tar xvjf /tmp/data/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tar.bz2 -C /${PACKAGE_NAME} && \
+  rm -rf /tmp/data
