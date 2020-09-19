@@ -1,6 +1,6 @@
 category: "kernel-5.8"
 name: "zfs-kmod"
-version: "2.0.0_rc1+3"
+version: "2.0.0_rc1+4"
 requires:
 - category: "kernel-5.8"
   name: "sabayon-full"
