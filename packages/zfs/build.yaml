@@ -16,10 +16,12 @@ prelude:
 - layman -f && eval 'echo "y" | layman -f -a sabayon' && eval 'echo "y" | layman -a sabayon-distro'
 - eselect profile set "default/linux/amd64/17.1/desktop"
 - gcc-config x86_64-pc-linux-gnu-8.2.0
+# Update sabayon-build project
+- cd /opt/sabayon-build && git checkout master && git reset --hard origin/master && git pull -ff && cd -
 steps:
 - |
   source /etc/profile  && \
-  emerge =${PACKAGE_CATEGORY}/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} && \
+  emerge =${PACKAGE_CATEGORY}/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} -j ${JOBS} && \
   quickpkg ${PACKAGE_CATEGORY}/${PACKAGE_NAME} && \
   mkdir /${PACKAGE_NAME} && mkdir -p /tmp/data && \
   qtbz2 -d /tmp/data/ ${PKGDIR}/${PACKAGE_CATEGORY}/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2 && \
