@@ -21,7 +21,7 @@ prelude:
 steps:
 - |
   source /etc/profile  && \
-  emerge =${PACKAGE_CATEGORY}/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} -j ${JOBS} && \
+  ACCEPT_KEYWORDS="~amd64" emerge =${PACKAGE_CATEGORY}/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*} -j ${JOBS} && \
   quickpkg ${PACKAGE_CATEGORY}/${PACKAGE_NAME} && \
   mkdir /${PACKAGE_NAME} && mkdir -p /tmp/data && \
   qtbz2 -d /tmp/data/ ${PKGDIR}/${PACKAGE_CATEGORY}/${PACKAGE_NAME}-${PACKAGE_VERSION%\+*}.tbz2 && \
