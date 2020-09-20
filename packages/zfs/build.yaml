@@ -8,6 +8,7 @@ env:
 prelude:
 - |
   equo i sys-fs/zfs --onlydeps --relaxed && \
+  equo i app-portage/layman dev-vcs/git sys-devel/gcc && \
   equo cleanup
 # TODO: Temporary until we will have a layer for this
 # Prepare emerge stuff
