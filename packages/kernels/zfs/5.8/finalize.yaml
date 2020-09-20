@@ -1,0 +1,2 @@
+install:
+- depmod -a || echo "Depmod -a failed. Try to run manually depmod command yourself."
