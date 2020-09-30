@@ -1,6 +1,6 @@
 category: "kernel"
 name: "sabayon-full"
-version: "5.4+1"
+version: "5.4+2"
 description: "Sabayon Stable Kernel"
 requires:
 - category: "kernel-5.4"
