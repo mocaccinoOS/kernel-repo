@@ -1,6 +1,6 @@
 category: "kernel-5.4"
 name: "sabayon-full"
-version: "5.4+2"
+version: "5.4+3"
 requires:
 - category: "kernel"
   name: "linux-firmware"
