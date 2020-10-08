@@ -10,10 +10,16 @@ DESTINATION?=$(ROOT_DIR)/build
 COMPRESSION?=gzip
 CLEAN?=false
 export TREE?=$(ROOT_DIR)/packages
-BUILD_ARGS?=-d --image-repository mocaccinoos/kernel-repo-amd64-cache
+REPO_CACHE?=mocaccinoos/kernel-repo-amd64-cache
+export REPO_CACHE
+BUILD_ARGS?=--pull --skip-if-metadata-exists=true --config $(ROOT_DIR)/conf/luet.yaml
 SUDO?=
 VALIDATE_OPTIONS?=-s
 export LUET_CONFIG?=conf/luet.yaml
+
+ifneq ($(strip $(REPO_CACHE)),)
+	BUILD_ARGS+=--image-repository $(REPO_CACHE)
+endif
 
 .PHONY: all
 all: deps build
