@@ -21,6 +21,7 @@ prelude:
 #         /usr/include/X11/extensions/Xrandr.h -> x11-libs/libXrandr
 #         /usr/include/X11/extensions/xf86vmode.h -> x11-libs/libXxf86vm
 - |
+  chmod a+x ./override_mirror.sh && ./override_mirror.sh && \
   equo i x11-drivers/nvidia-drivers --onlydeps --relaxed && \
   equo remove x11-drivers/nvidia-userspace && \
   equo cleanup
