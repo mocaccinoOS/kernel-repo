@@ -4,6 +4,12 @@
 
 set -e
 
+# Permit to override default options to users.
+# ZFS integration needs systemd stuff.
+if [ -f "/etc/mocaccino-dracut.conf" ] ; then
+  source /etc/mocaccino-dracut.conf
+fi
+
 MOCACCINO_DRACUT_COMMON_ARGS="${MOCACCINO_DRACUT_COMMON_ARGS:--H -q -f -o systemd -o systemd-initrd -o systemd-networkd -o dracut-systemd}"
 MOCACCINO_INITRD_DIR="${MOCACCINO_INITRD_DIR:-/boot}"
 # Current initrd naming is: initramfs-genkernel-${ARCH}-${KVER}.0-mocaccino
@@ -37,7 +43,7 @@ Usage:
 
 Examples:
 
-\$# mocaccino-dracut --rebuild 4.18
+\$# mocaccino-dracut --rebuild 5.4
 
 \$# mocaccino-dracut --list-available
 "
