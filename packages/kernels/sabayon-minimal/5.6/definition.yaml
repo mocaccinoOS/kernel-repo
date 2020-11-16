@@ -1,7 +1,0 @@
-category: "kernel-5.6"
-name: "sabayon-minimal"
-version: "5.6+1"
-requires:
-- category: "kernel"
-  name: "linux-firmware"
-  version: ">0"
