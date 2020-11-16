@@ -1,7 +1,9 @@
 category: "kernel-5.4"
 name: "sabayon-minimal"
-version: "5.4+1"
+version: "5.4.73"
 requires:
 - category: "kernel"
   name: "linux-firmware"
   version: ">0"
+labels:
+  original.package.version: "5.4.73"
