@@ -1,0 +1,5 @@
+name: mocaccino-full
+category: kernel
+version: "5.9.9"
+
+arch: "x86_64"
