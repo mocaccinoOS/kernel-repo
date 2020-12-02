@@ -1,8 +1,8 @@
-name: mocaccino-full
+name: mocaccino-sources
 category: kernel
 version: "5.9.9"
-
-arch: "x86_64"
+prefix: linux
+suffix: mocaccino
 
 labels:
   autobump.strategy: "custom"
