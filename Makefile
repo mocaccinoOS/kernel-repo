@@ -10,7 +10,7 @@ DESTINATION?=$(ROOT_DIR)/build
 COMPRESSION?=gzip
 CLEAN?=false
 export TREE?=$(ROOT_DIR)/packages
-REPO_CACHE?=quay.io/mocaccinoos/kernel-repo-amd64-cache
+REPO_CACHE?=quay.io/mocaccinocache/kernel-repo-amd64-cache
 export REPO_CACHE
 BUILD_ARGS?=--pull --skip-if-metadata-exists=true --config $(ROOT_DIR)/conf/luet.yaml
 SUDO?=
