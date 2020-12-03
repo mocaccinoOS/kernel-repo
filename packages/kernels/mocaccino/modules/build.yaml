@@ -1,0 +1,10 @@
+steps:
+- bash build.sh
+env:
+- PREFIX={{.Values.prefix}}
+- SUFFIX={{.Values.suffix}}
+package_dir: /luetbuild/modules
+requires:
+- name: "mocaccino-full"
+  category: "kernel"
+  version: ">=0"
