@@ -1,4 +1,4 @@
-steps:
+prelude:
 - bash copy.sh
 env:
 - PREFIX={{.Values.prefix}}

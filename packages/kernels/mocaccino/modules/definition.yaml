@@ -4,6 +4,7 @@ version: "5.9.9"
 prefix: linux
 suffix: mocaccino
 
+arch: "x86_64"
 labels:
   autobump.strategy: "custom"
   autobump.hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"

@@ -3,6 +3,8 @@ steps:
 env:
 - PREFIX={{.Values.prefix}}
 - SUFFIX={{.Values.suffix}}
+- ARCH={{.Values.arch}}
+- KERNEL_PREFIX=kernel-vanilla
 package_dir: /luetbuild/modules
 requires:
 - name: "mocaccino-full"

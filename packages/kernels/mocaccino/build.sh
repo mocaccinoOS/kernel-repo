@@ -1,5 +1,5 @@
 #!/bin/bash
-
+PACKAGE_VERSION=${PACKAGE_VERSION%\+*}
 MAJOR_VERSION=$(awk -F. '{print $1"."$2}' <<< $PACKAGE_VERSION)
 mkdir -p output/boot
 pushd linux 
