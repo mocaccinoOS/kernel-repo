@@ -1,10 +1,12 @@
 name: mocaccino-sources
 category: kernel
-version: "5.9.9"
+version: "5.9.9+1"
 prefix: linux
 suffix: mocaccino
 
 labels:
+  autobump.revdeps: "false"
+  autobump.string_replace: '{ "0.": "" }'
   autobump.strategy: "custom"
   autobump.hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"
   autobump.version_hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"
