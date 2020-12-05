@@ -6,8 +6,9 @@ kernelprefix: kernel-vanilla
 arch: "x86_64"
 labels:
   autobump.revdeps: "false"
-  autobump.string_replace: '{ "0.": "" }'
+  autobump.string_replace: '{ "prefix": "" }'
   autobump.strategy: "custom"
+  autobump.prefix: "prefix"
   autobump.hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"
   autobump.version_hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"
   package.version: "5.9.9"
