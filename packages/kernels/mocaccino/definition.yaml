@@ -1,6 +1,11 @@
 name: mocaccino-full
 category: kernel
-version: "5.9.9+1"
+version: "5.9.9+2"
+
+requires:
+- name: "mocaccino-modules"
+  category: "kernel"
+  version: ">=0"
 
 arch: "x86_64"
 

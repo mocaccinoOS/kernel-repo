@@ -1,8 +1,7 @@
-name: mocaccino-modules
+name: mocaccino-minimal
 category: kernel
-version: "5.9.9+2"
-prefix: linux
-suffix: mocaccino
+version: "5.9.9+1"
+kernelprefix: kernel-vanilla
 
 arch: "x86_64"
 labels:
@@ -11,3 +10,4 @@ labels:
   autobump.strategy: "custom"
   autobump.hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"
   autobump.version_hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"
+  package.version: "5.9.9"

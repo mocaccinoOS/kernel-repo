@@ -3,7 +3,7 @@ env:
 #- LUET_YES=true
 - GCC_VERSION=10
 - ARCH={{.Values.arch}}
-- KERNEL_PREFIX=kernel-vanilla
+- KERNEL_PREFIX=vanilla
 prelude:
 #- luet install repository/mocaccino-portage-stable
 #- luet install layers/system-x

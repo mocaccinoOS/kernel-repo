@@ -19,6 +19,6 @@ rm -f "$outdir"/lib/modules/**/build \
 
 popd
 
-mv $outdir/boot/config-$PACKAGE_VERSION $outdir/boot/config-${KERNEL_PREFIX}-${ARCH}-${MAJOR_VERSION}
-mv $outdir/boot/System.map-$PACKAGE_VERSION $outdir/boot/System.map-${KERNEL_PREFIX}-${ARCH}-${MAJOR_VERSION}
-mv $outdir/boot/vmlinuz-$PACKAGE_VERSION $outdir/boot/vmlinuz-${KERNEL_PREFIX}-${ARCH}-${MAJOR_VERSION}
+mv $outdir/boot/config-$PACKAGE_VERSION $outdir/boot/config-${KERNEL_PREFIX}-${ARCH}-${MAJOR_VERSION}.0-mocaccino
+mv $outdir/boot/System.map-$PACKAGE_VERSION $outdir/boot/System.map-${KERNEL_PREFIX}-${ARCH}-${MAJOR_VERSION}.0-mocaccino
+mv $outdir/boot/vmlinuz-$PACKAGE_VERSION $outdir/boot/vmlinuz-${KERNEL_PREFIX}-${ARCH}-${MAJOR_VERSION}.0-mocaccino

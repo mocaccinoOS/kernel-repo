@@ -1,0 +1,46 @@
+steps:
+- cp -rfv output/boot/* /luetbuild/modules/boot
+package_dir: /luetbuild/modules
+requires:
+- name: "mocaccino-modules"
+  category: "kernel"
+  version: ">=0"
+
+includes:
+# Kernel
+- /boot$
+- /boot/kernel-.*
+- /boot/System.map-.*
+
+- /lib$
+- /lib/modules$
+- /lib/modules/{{ ( index .Values.labels "package.version" ) }}$
+- /lib/modules/{{ ( index .Values.labels "package.version" ) }}/modules.*
+- /lib/modules/{{ ( index .Values.labels "package.version" ) }}/source
+- /lib/modules/{{ ( index .Values.labels "package.version" ) }}/build
+
+# OverlayFS
+- /lib/modules/{{ ( index .Values.labels "package.version" ) }}/kernel$
+- /lib/modules/{{ ( index .Values.labels "package.version" ) }}/kernel/fs$
+- /lib/modules/{{ ( index .Values.labels "package.version" ) }}/kernel/fs/mbcache.ko
+- /lib/modules/{{ ( index .Values.labels "package.version" ) }}/kernel/fs/overlayfs$
+- /lib/modules/.*/kernel/fs/overlayfs/.*
+- /lib/modules/.*/kernel/lib$
+- /lib/modules/.*/kernel/lib/.*
+# EXT
+- /lib/modules/.*/kernel/fs/ext2$
+- /lib/modules/.*/kernel/fs/ext4$
+- /lib/modules/.*/kernel/fs/ext2/.*
+- /lib/modules/.*/kernel/fs/ext4/.*
+
+# USB
+- /lib/modules/.*/kernel$
+- /lib/modules/.*/kernel/drivers$
+- /lib/modules/.*/kernel/drivers/usb$
+- /lib/modules/.*/kernel/drivers/usb/.*
+- /lib/modules/.*/kernel/drivers/usb/storage$
+- /lib/modules/.*/kernel/drivers/usb/storage/.*
+- /lib/modules/.*/kernel/drivers/usb/host$
+- /lib/modules/.*/kernel/drivers/usb/host/.*
+- /lib/modules/.*/kernel/drivers/usb/common$
+- /lib/modules/.*/kernel/drivers/usb/common/.*
