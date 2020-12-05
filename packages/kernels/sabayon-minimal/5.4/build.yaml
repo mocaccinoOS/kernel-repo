@@ -26,6 +26,8 @@ includes:
 - /lib/modules/5.4.0-sabayon/kernel/fs/ext4$
 - /lib/modules/5.4.0-sabayon/kernel/fs/ext2/.*
 - /lib/modules/5.4.0-sabayon/kernel/fs/ext4/.*
+- /lib/modules/5.4.0-sabayon/kernel/fs/jbd2$
+- /lib/modules/5.4.0-sabayon/kernel/fs/jbd2/.*
 
 # USB
 - /lib/modules/5.4.0-sabayon/kernel$

@@ -30,8 +30,10 @@ includes:
 # EXT
 - /lib/modules/.*/kernel/fs/ext2$
 - /lib/modules/.*/kernel/fs/ext4$
+- /lib/modules/.*/kernel/fs/jbd2$
 - /lib/modules/.*/kernel/fs/ext2/.*
 - /lib/modules/.*/kernel/fs/ext4/.*
+- /lib/modules/.*/kernel/fs/jbd2/.*
 
 # USB
 - /lib/modules/.*/kernel$
