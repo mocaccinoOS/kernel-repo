@@ -18,6 +18,11 @@ includes:
 - /lib/modules/5.4.0-sabayon/kernel/fs/overlayfs/.*
 - /lib/modules/5.4.0-sabayon/kernel/lib$
 - /lib/modules/5.4.0-sabayon/kernel/lib/.*
+# EXT
+- /lib/modules/5.4.0-sabayon/kernel/fs/ext2$
+- /lib/modules/5.4.0-sabayon/kernel/fs/ext4$
+- /lib/modules/5.4.0-sabayon/kernel/fs/ext2/.*
+- /lib/modules/5.4.0-sabayon/kernel/fs/ext4/.*
 
 # USB
 - /lib/modules/5.4.0-sabayon/kernel$
