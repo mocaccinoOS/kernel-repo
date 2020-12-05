@@ -2,7 +2,10 @@
 unpack: true
 includes:
 # Kernel
-- /boot$|/boot/.*
+- /boot$
+- /boot/initramfs-genkernel-x86_64-5.4.0-sabayon
+- /boot/kernel-genkernel-x86_64-5.4.0-sabayon
+- /boot/System.map-genkernel-x86_64-5.4.0-sabayon
 - /lib$
 - /lib/modules$
 - /lib/modules/5.4.0-sabayon$
