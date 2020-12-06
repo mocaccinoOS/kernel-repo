@@ -1,8 +1,7 @@
 name: mocaccino-minimal
 category: kernel
-version: "5.9.9+3"
+version: "5.9.12"
 kernelprefix: kernel-vanilla
-
 arch: "x86_64"
 labels:
   autobump.revdeps: "false"
@@ -11,4 +10,4 @@ labels:
   autobump.prefix: "prefix"
   autobump.hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"
   autobump.version_hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"
-  package.version: "5.9.9"
+  package.version: "5.9.12"
