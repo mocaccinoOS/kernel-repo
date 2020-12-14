@@ -1,6 +1,6 @@
 name: mocaccino-modules
 category: kernel
-version: "5.9.12"
+version: "5.10"
 prefix: linux
 suffix: mocaccino
 arch: "x86_64"
@@ -11,4 +11,4 @@ labels:
   autobump.prefix: "prefix"
   autobump.hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"
   autobump.version_hook: "curl -s https://www.kernel.org/finger_banner | grep -m1 stable | awk '{print $NF}'"
-  package.version: "5.9.12"
+  package.version: "5.10"
