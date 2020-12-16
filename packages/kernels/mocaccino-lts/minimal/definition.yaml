@@ -1,4 +1,4 @@
-name: mocaccino-minimal
+name: mocaccino-lts-minimal
 category: kernel
 version: "5.4.84"
 kernelprefix: kernel-vanilla
