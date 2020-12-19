@@ -27,6 +27,11 @@ includes:
 - /lib/modules/.*/kernel/fs/overlayfs/.*
 - /lib/modules/.*/kernel/lib$
 - /lib/modules/.*/kernel/lib/.*
+
+# Crypto
+- /lib/modules/.*/kernel/crypto$
+- /lib/modules/.*/kernel/crypto/.*
+
 # EXT
 - /lib/modules/.*/kernel/fs/ext2$
 - /lib/modules/.*/kernel/fs/ext4$
@@ -47,6 +52,32 @@ includes:
 - /lib/modules/.*/kernel/drivers/usb/common$
 - /lib/modules/.*/kernel/drivers/usb/common/.*
 
-# Keyboard
+# Input
+- /lib/modules/.*/kernel/drivers/input$
+- /lib/modules/.*/kernel/drivers/input/.*
 - /lib/modules/.*/kernel/drivers/input/keyboard$
 - /lib/modules/.*/kernel/drivers/input/keyboard/.*
+- /lib/modules/.*/kernel/drivers/input/misc$
+- /lib/modules/.*/kernel/drivers/input/misc/.*
+- /lib/modules/.*/kernel/drivers/input/mouse$
+- /lib/modules/.*/kernel/drivers/input/mouse/.*
+
+# block
+- /lib/modules/.*/kernel/drivers/block$
+- /lib/modules/.*/kernel/drivers/block/.*
+
+# ATA
+- /lib/modules/.*/kernel/drivers/ata$
+- /lib/modules/.*/kernel/drivers/ata/.*
+
+# md
+- /lib/modules/.*/kernel/drivers/md$
+- /lib/modules/.*/kernel/drivers/md/.*
+
+# firewire
+- /lib/modules/.*/kernel/drivers/firewire$
+- /lib/modules/.*/kernel/drivers/firewire/.*
+
+# virtio
+- /lib/modules/.*/kernel/drivers/virtio$
+- /lib/modules/.*/kernel/drivers/virtio/.*
