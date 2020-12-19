@@ -52,6 +52,13 @@ includes:
 - /lib/modules/.*/kernel/drivers/usb/common$
 - /lib/modules/.*/kernel/drivers/usb/common/.*
 
+- /lib/modules/.*/kernel/drivers/hid$
+- /lib/modules/.*/kernel/drivers/hid/.*
+- /lib/modules/.*/kernel/drivers/hid/usbhid$
+- /lib/modules/.*/kernel/drivers/hid/usbhid/.*
+- /lib/modules/.*/kernel/drivers/hid/i2c-hid$
+- /lib/modules/.*/kernel/drivers/hid/i2c-hid/.*
+
 # Input
 - /lib/modules/.*/kernel/drivers/input$
 - /lib/modules/.*/kernel/drivers/input/.*
