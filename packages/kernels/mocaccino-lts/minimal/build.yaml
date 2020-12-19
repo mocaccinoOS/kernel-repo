@@ -46,3 +46,7 @@ includes:
 - /lib/modules/.*/kernel/drivers/usb/host/.*
 - /lib/modules/.*/kernel/drivers/usb/common$
 - /lib/modules/.*/kernel/drivers/usb/common/.*
+
+# Keyboard
+- /lib/modules/.*/kernel/drivers/input/keyboard$
+- /lib/modules/.*/kernel/drivers/input/keyboard/.*
