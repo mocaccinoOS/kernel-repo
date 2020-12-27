@@ -1,7 +1,0 @@
-category: "kernel-5.7"
-name: "debian-full"
-version: "5.7+2"
-requires:
-- category: "kernel"
-  name: "linux-firmware"
-  version: ">=0"
