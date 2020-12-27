@@ -1,5 +1,5 @@
 install:
+- depmod -a || true
 - rm -rf /boot/bzImage || true
 - ln -s /boot/kernel-* /boot/bzImage || true
 - luet kernel-switcher || true
-- depmod -a || true
