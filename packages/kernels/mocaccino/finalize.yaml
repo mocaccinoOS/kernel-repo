@@ -1,5 +1,5 @@
 install:
-- depmod -a || true
+- depmod -a {{ index .Values.labels "package.version" }} || true
 - rm -rf /boot/bzImage || true
 - ln -s /boot/kernel-* /boot/bzImage || true
 - luet kernel-switcher || true
