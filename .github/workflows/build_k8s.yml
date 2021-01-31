@@ -29,9 +29,6 @@ jobs:
         curl https://get.mocaccino.org/luet/get_luet_root.sh | sudo sh
         sudo luet install -y repository/mocaccino-extra-stable
         sudo luet install -y system/luet-extensions system/luet-devkit utils/jq net-fs/minio-client container/kubectl
-    - name: Validate 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
-      run: |
-        make validate
     - name: Build repository 🔧
       run: |
         export KUBECONFIG=$GITHUB_WORKSPACE/kubeconfig
