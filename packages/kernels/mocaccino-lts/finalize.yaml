@@ -1,5 +1,5 @@
 install:
-- depmod -a {{ index .Values.labels "package.version" }} || true
+- depmod -a {{ index .Values.labels "package.version" }}-mocaccino || true
 - rm -rf /boot/bzImage || true
 - ln -s /boot/kernel-* /boot/bzImage || true
 - luet kernel-switcher || true
