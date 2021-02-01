@@ -1,8 +1,8 @@
 prelude:
 - bash copy.sh
 env:
-- PREFIX={{.Values.prefix}}
 - SUFFIX={{.Values.suffix}}
+- KERNEL_TYPE={{ .Values.prefix }}
 package_dir: /luetbuild/sources
 requires:
 - name: "mocaccino-full"

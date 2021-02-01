@@ -2,8 +2,8 @@ name: mocaccino-lts-modules
 category: kernel
 version: "5.4.86"
 prefix: linux
-suffix: mocaccino
 arch: "x86_64"
+suffix: mocaccino
 labels:
   autobump.revdeps: "false"
   autobump.string_replace: '{ "prefix": "" }'

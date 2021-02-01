@@ -9,6 +9,7 @@ requires:
     category: "system"
     version: ">=0"
 arch: "x86_64"
+suffix: mocaccino
 labels:
   autobump.revdeps: "false"
   autobump.string_replace: '{ "prefix": "" }'

@@ -3,6 +3,8 @@ category: kernel
 version: "5.4.86"
 kernelprefix: kernel-vanilla
 arch: "x86_64"
+suffix: mocaccino
+prefix: linux
 labels:
   autobump.revdeps: "false"
   autobump.string_replace: '{ "prefix": "" }'
