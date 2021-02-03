@@ -1,6 +1,6 @@
 name: mocaccino-lts-full
 category: kernel
-version: "5.4.86"
+version: "5.4.86+1"
 requires:
   - name: "mocaccino-lts-modules"
     category: "kernel"
@@ -9,6 +9,8 @@ requires:
     category: "system"
     version: ">=0"
 arch: "x86_64"
+prefix: linux
+suffix: mocaccino
 labels:
   autobump.revdeps: "false"
   autobump.string_replace: '{ "prefix": "" }'

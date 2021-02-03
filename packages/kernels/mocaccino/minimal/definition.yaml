@@ -1,7 +1,8 @@
 name: mocaccino-minimal
 category: kernel
-version: "5.10.12"
+version: "5.10.12+1"
 kernelprefix: kernel-vanilla
+suffix: mocaccino
 arch: "x86_64"
 labels:
   autobump.revdeps: "false"
