@@ -8,6 +8,9 @@ requires:
   - name: "kmod"
     category: "system"
     version: ">=0"
+  - name: "luet-extensions"
+    category: "system"
+    version: ">=0"
 arch: "x86_64"
 suffix: mocaccino
 labels:
