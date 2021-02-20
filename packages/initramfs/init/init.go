@@ -3,13 +3,14 @@
 package main
 
 import (
-	"github.com/u-root/u-root/pkg/libinit"
-	"github.com/u-root/u-root/pkg/ulog"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
 	"syscall"
+
+	"github.com/u-root/u-root/pkg/libinit"
+	"github.com/u-root/u-root/pkg/ulog"
 )
 
 type initCmds struct {
@@ -53,6 +54,7 @@ func loadModules() error {
 	// TODO: Report failed kernel modules load to a file available in
 	// runtime /var/log
 	// TODO: run depmod() if no alias file is found
+	depmod()
 	log.Println("Loading kernel modules", strings.Join(modules, " "))
 	for _, m := range modules {
 		modprobe(m) // Skip error and log output for now

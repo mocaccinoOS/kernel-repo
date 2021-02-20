@@ -48,7 +48,6 @@ steps:
 # Ethernet + address family: af_packet
 - find /luetbuild/modules/lib/modules/**/kernel/drivers/net/ethernet  -exec cp -r --parents {} ./modules_copy \;
 - find /luetbuild/modules/lib/modules/**/kernel/net/packet  -exec cp --parents -r {} ./modules_copy \;
-- cp -rf /luetbuild/modules/lib/modules/**/modules.* ./modules_copy/lib/modules/**/
 
 - |
    u-root \
