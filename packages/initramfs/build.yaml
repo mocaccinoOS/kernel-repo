@@ -62,14 +62,22 @@ steps:
    -files "/sbin/switch_root" \
    -files "/bin/mkdir" \
    -files "/bin/sh" \
-   -format=cpio -build=bb -defaultsh="" -o initramfs.cpio github.com/u-root/u-root/cmds/core/{ip,ls,dhclient,init,cat,echo,chroot,sleep}
+   -format=cpio -build=bb -defaultsh="" -o initramfs.cpio \
+   github.com/u-root/u-root/cmds/core/ip \
+   github.com/u-root/u-root/cmds/core/ls \
+   github.com/u-root/u-root/cmds/core/dhclient \
+   github.com/u-root/u-root/cmds/core/init \
+   github.com/u-root/u-root/cmds/core/cat \
+   github.com/u-root/u-root/cmds/core/echo \
+   github.com/u-root/u-root/cmds/core/chroot \
+   github.com/u-root/u-root/cmds/core/sleep
 
 - |
    xz --check=crc32 -9 --lzma2=dict=1MiB \
       --stdout initramfs.cpio \
       | dd conv=sync bs=512 \
-      of=/boot/initramfs
-
+      of=/boot/{{.Values.name}}-{{.Values.version}}
+- ln -s /boot/{{.Values.name}}-{{.Values.version}} /boot/Initrd
 excludes:
 - ^/luetbuild
 - ^/root
