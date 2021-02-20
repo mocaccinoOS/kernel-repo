@@ -31,24 +31,23 @@ steps:
 - go get github.com/pilebones/go-udev
 
 - mkdir modules_copy
-- find /luetbuild/modules/lib/modules/**/kernel/fs  -exec cp {} --parents ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/lib  -exec cp {} --parents ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/crypto  -exec cp {} --parents ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/crypto  -exec cp {} --parents ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/usb  -exec cp {} --parents ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/hid  -exec cp {} --parents ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/input  -exec cp {} --parents ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/block  -exec cp {} --parents ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/ata -exec cp {} --parents ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/md -exec cp {} --parents ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/virtio  -exec cp --parents {} ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/cdrom  -exec cp --parents {} ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/scsi  -exec cp --parents {} ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/md  -exec cp {} --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/fs  -exec cp {} -r --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/lib  -exec cp {} -r --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/crypto  -exec cp {} -r --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/crypto  -exec cp {} -r --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/drivers/usb  -exec cp {} -r --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/drivers/hid  -exec cp {} -r --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/drivers/input  -exec cp {} -r --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/drivers/block  -exec cp {} -r --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/drivers/ata -exec cp {} -r --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/drivers/md -exec cp {} -r --parents ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/drivers/virtio  -exec cp -r --parents {} ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/drivers/scsi  -exec cp -r --parents {} ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/drivers/md  -exec cp {} -r --parents ./modules_copy \;
 
 # Ethernet + address family: af_packet
-- find /luetbuild/modules/lib/modules/**/kernel/drivers/net/ethernet  -exec cp --parents {} ./modules_copy \;
-- find /luetbuild/modules/lib/modules/**/kernel/net/packet  -exec cp --parents {} ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/drivers/net/ethernet  -exec cp -r --parents {} ./modules_copy \;
+- find /luetbuild/modules/lib/modules/**/kernel/net/packet  -exec cp --parents -r {} ./modules_copy \;
 - cp -rf /luetbuild/modules/lib/modules/**/modules.* ./modules_copy/lib/modules/**/
 
 - |
