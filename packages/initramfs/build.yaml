@@ -53,15 +53,15 @@ steps:
    u-root \
    -files "/luetbuild/loader.sh:/loader" \
    -files "/luetbuild/modules/lib/modules:/lib/modules" \
-   -files "/sbin/blkid" \
-   -files "/usr/bin/mount" \
-   -files "/usr/sbin/modprobe" \
-   -files "/usr/sbin/depmod" \
-   -files "/usr/sbin/losetup" \
-   -files "/usr/bin/setsid" \
-   -files "/sbin/switch_root" \
-   -files "/bin/mkdir" \
-   -files "/bin/sh" \
+   -files "$(which blkid)" \
+   -files "$(which mount)" \
+   -files "$(which modprobe)" \
+   -files "$(which depmod)" \
+   -files "$(which losetup)" \
+   -files "$(which setsid)" \
+   -files "$(which switch_root)" \
+   -files "$(which mkdir)" \
+   -files "$(which sh)" \
    -format=cpio -build=bb -defaultsh="" -o initramfs.cpio \
    github.com/u-root/u-root/cmds/core/ip \
    github.com/u-root/u-root/cmds/core/ls \
