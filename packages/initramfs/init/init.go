@@ -33,7 +33,7 @@ var (
 )
 
 func modprobe(s string) (string, error) {
-	cmd := exec.Command("/usr/sbin/modprobe", s)
+	cmd := exec.Command("modprobe", s)
 	stdoutStderr, err := cmd.CombinedOutput()
 	if err != nil {
 		return "", err
@@ -41,20 +41,21 @@ func modprobe(s string) (string, error) {
 	return string(stdoutStderr), nil
 }
 
-func depmod() error {
-	cmd := exec.Command("/usr/sbin/depmod", "-a")
-	err := cmd.Run()
+func depmod() (string, error) {
+	cmd := exec.Command("depmod", "-a")
+	stdoutStderr, err := cmd.CombinedOutput()
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	return string(stdoutStderr), nil
 }
 
 func loadModules() error {
 	// TODO: Report failed kernel modules load to a file available in
 	// runtime /var/log
 	// TODO: run depmod() if no alias file is found
-	depmod()
+	out, _ := depmod()
+	log.Println(out)
 	log.Println("Loading kernel modules", strings.Join(modules, " "))
 	for _, m := range modules {
 		modprobe(m) // Skip error and log output for now

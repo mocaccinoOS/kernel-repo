@@ -10,7 +10,7 @@ env:
 
 prelude:
 
-- apt-get install -y upx
+- apt-get install -y upx kmod
 - wget https://golang.org/dl/go{{.Values.golang_version}}.linux-{{.Values.arch}}.tar.gz -O golang.tar.gz
 
 - tar -C /usr/local -xzf golang.tar.gz
