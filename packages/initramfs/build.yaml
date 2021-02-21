@@ -78,7 +78,7 @@ steps:
       --stdout initramfs.cpio \
       | dd conv=sync bs=512 \
       of=/boot/{{.Values.name}}-{{.Values.version}}
-- cd /boot/ && ln -s {{.Values.name}}-{{.Values.version}} /Initrd
+- cd /boot/ && ln -s {{.Values.name}}-{{.Values.version}} Initrd
 excludes:
 - ^/luetbuild
 - ^/root
