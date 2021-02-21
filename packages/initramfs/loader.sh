@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 prepare_workarea() {
   mount -t devtmpfs none /dev
