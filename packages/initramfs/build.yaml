@@ -62,6 +62,7 @@ steps:
    -files "$(which switch_root)" \
    -files "$(which mkdir)" \
    -files "$(which sh)" \
+   -files "$(which bash)" \
    -format=cpio -build=bb -defaultsh="" -o initramfs.cpio \
    github.com/u-root/u-root/cmds/core/ip \
    github.com/u-root/u-root/cmds/core/ls \
