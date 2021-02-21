@@ -1,7 +1,7 @@
 requires:
 - name: {{.Values.modules_name}}
   category: kernel
-  version: ">=0"
+  version: ">={{.Values.version}}"
 env:
 - PATH=$PATH:/usr/local/go/bin
 - GOPATH=/luetbuild/go
