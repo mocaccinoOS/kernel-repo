@@ -1,7 +1,7 @@
 requires:
 - name: {{.Values.modules_name}}
   category: kernel
-  version: ">={{.Values.version}}"
+  version: ">={{ ( index .Values.labels "package.version" ) }}"
 env:
 - PATH=$PATH:/usr/local/go/bin
 - GOPATH=/luetbuild/go
@@ -78,7 +78,7 @@ steps:
       --stdout initramfs.cpio \
       | dd conv=sync bs=512 \
       of=/boot/{{.Values.name}}-{{.Values.version}}
-- ln -s /boot/{{.Values.name}}-{{.Values.version}} /boot/Initrd
+- cd /boot/ && ln -s {{.Values.name}}-{{.Values.version}} /Initrd
 excludes:
 - ^/luetbuild
 - ^/root
