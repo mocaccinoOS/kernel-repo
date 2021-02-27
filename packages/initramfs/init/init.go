@@ -85,7 +85,7 @@ func initCmd() *initCmds {
 
 	return &initCmds{
 		cmds: []*exec.Cmd{
-			libinit.Command("/bbin/dhclient", ctty, libinit.WithArguments("-ipv6=false")),
+			//		libinit.Command("/bbin/dhclient", ctty, libinit.WithArguments("-ipv6=false")),
 			libinit.Command("/loader", libinit.WithCloneFlags(syscall.CLONE_NEWPID), ctty),
 			libinit.Command("/bin/sh", ctty),
 		},
