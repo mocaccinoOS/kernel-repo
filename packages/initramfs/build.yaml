@@ -59,6 +59,7 @@ steps:
    -files "$(which depmod)" \
    -files "$(which losetup)" \
    -files "$(which setsid)" \
+   -files "$(which modprobe)" \
    -files "$(which switch_root)" \
    -files "$(which mkdir)" \
    -files "$(which sh)" \
