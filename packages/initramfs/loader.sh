@@ -118,13 +118,6 @@ search_overlay() {
       mkdir -p $OVERLAY_DIR
       mkdir -p $UPPER_DIR
       mkdir -p $WORK_DIR
-
-
-      modprobe overlay
-      OUT=$?
-      if [ ! "$OUT" = "0" ] ; then
-        echo -e "  \\e[31mModprobe failed (overlay).\\e[0m"
-      fi
       
       mount -t overlay -o lowerdir=$OVERLAY_DIR:/mnt,upperdir=$UPPER_DIR,workdir=$WORK_DIR none /mnt
       OUT=$?

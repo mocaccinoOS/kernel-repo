@@ -12,7 +12,7 @@ CLEAN?=false
 export TREE?=$(ROOT_DIR)/packages
 REPO_CACHE?=quay.io/mocaccinocache/kernel-repo-amd64-cache
 export REPO_CACHE
-BUILD_ARGS?=--pull --skip-if-metadata-exists=true --config $(ROOT_DIR)/conf/luet.yaml
+BUILD_ARGS?=--pull --live-output --only-target-package --config $(ROOT_DIR)/conf/luet.yaml
 SUDO?=
 VALIDATE_OPTIONS?=-s
 export LUET_CONFIG?=conf/luet.yaml
