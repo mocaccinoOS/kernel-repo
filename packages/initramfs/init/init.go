@@ -11,6 +11,7 @@ import (
 
 	"github.com/u-root/u-root/pkg/libinit"
 	"github.com/u-root/u-root/pkg/ulog"
+	gomodprobe "pault.ag/go/modprobe"
 )
 
 type initCmds struct {
@@ -33,12 +34,10 @@ var (
 )
 
 func modprobe(s string) (string, error) {
-	cmd := exec.Command("modprobe", s)
-	stdoutStderr, err := cmd.CombinedOutput()
-	if err != nil {
+	if err := gomodprobe.Load(s, ""); err != nil {
 		return "", err
 	}
-	return string(stdoutStderr), nil
+	return "", nil
 }
 
 func depmod() (string, error) {
@@ -77,20 +76,33 @@ func ensureDirs() error {
 	return nil
 }
 
-func initCmd() *initCmds {
-	ctty := libinit.WithTTYControl(true)
+func sysExec() {
+	env := os.Environ()
+	binary, lookErr := exec.LookPath("bash")
+	if lookErr != nil {
+		panic(lookErr)
+	}
 
-	ensureDirs()
-	loadModules()
-
-	return &initCmds{
-		cmds: []*exec.Cmd{
-			//		libinit.Command("/bbin/dhclient", ctty, libinit.WithArguments("-ipv6=false")),
-			libinit.Command("/loader", libinit.WithCloneFlags(syscall.CLONE_NEWPID), ctty),
-			libinit.Command("/bin/sh", ctty),
-		},
+	execErr := syscall.Exec(binary, []string{"bash", "/loader"}, env)
+	if execErr != nil {
+		panic(execErr)
 	}
 }
+
+// func initCmd() *initCmds {
+// 	ctty := libinit.WithTTYControl(true)
+
+// 	ensureDirs()
+// 	loadModules()
+
+// 	return &initCmds{
+// 		cmds: []*exec.Cmd{
+// 			//		libinit.Command("/bbin/dhclient", ctty, libinit.WithArguments("-ipv6=false")),
+// 			libinit.Command("/loader", libinit.WithCloneFlags(syscall.CLONE_NEWPID), ctty),
+// 			libinit.Command("/bin/sh", ctty),
+// 		},
+// 	}
+// }
 
 func main() {
 
@@ -106,18 +118,25 @@ func main() {
 	libinit.CreateRootfs()
 	libinit.NetInit()
 
-	ic := initCmd()
+	ensureDirs()
+	loadModules()
+
+	//ic := initCmd()
 
 	if err := ulog.KernelLog.SetConsoleLogLevel(ulog.KLogNotice); err != nil {
 		log.Printf("Could not set log level: %v", err)
 	}
 
-	cmdCount := libinit.RunCommands(debug, ic.cmds...)
-	if cmdCount == 0 {
-		log.Printf("No suitable executable found in %v", ic.cmds)
-	}
+	// cmdCount := libinit.RunCommands(debug, ic.cmds...)
+	// if cmdCount == 0 {
+	// 	log.Printf("No suitable executable found in %v", ic.cmds)
+	// }
+	sysExec()
+	syscall.Sync()
 
-	log.Printf("Waiting for orphaned children")
-	libinit.WaitOrphans()
-	log.Printf("All commands are done")
+	//log.Printf("Waiting for orphaned children")
+	//libinit.WaitOrphans()
+	//log.Printf("All commands are done")
+
+	Halt()
 }
