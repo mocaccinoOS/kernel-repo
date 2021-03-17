@@ -61,6 +61,7 @@ steps:
    -files "$(which setsid)" \
    -files "$(which switch_root)" \
    -files "$(which mkdir)" \
+   -files "$(which modprobe)" \
    -files "$(which sh)" \
    -files "$(which bash)" \
    -format=cpio -build=bb -defaultsh="" -o initramfs.cpio \

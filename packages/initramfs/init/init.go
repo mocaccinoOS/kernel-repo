@@ -34,6 +34,15 @@ var (
 )
 
 func modprobe(s string) (string, error) {
+	cmd := exec.Command("modprobe", s)
+	stdoutStderr, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", err
+	}
+	return string(stdoutStderr), nil
+}
+
+func modprobeNative(s string) (string, error) {
 	if err := gomodprobe.Load(s, ""); err != nil {
 		return "", err
 	}
