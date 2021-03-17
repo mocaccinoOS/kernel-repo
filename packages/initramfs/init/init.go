@@ -124,7 +124,11 @@ func main() {
 	}
 
 	libinit.SetEnv()
+	// CreateRootfs creates a symlink to /dev/pts/ptmx
+	// and thus have to be chmod to 666: https://www.kernel.org/doc/Documentation/filesystems/devpts.txt
 	libinit.CreateRootfs()
+	os.Chmod("/dev/pts/ptmx", 0666)
+
 	libinit.NetInit()
 
 	ensureDirs()
