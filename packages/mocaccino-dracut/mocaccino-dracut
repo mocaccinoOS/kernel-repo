@@ -12,8 +12,10 @@ fi
 
 MOCACCINO_DRACUT_COMMON_ARGS="${MOCACCINO_DRACUT_COMMON_ARGS:--H -q -f -o systemd -o systemd-initrd -o systemd-networkd -o dracut-systemd}"
 MOCACCINO_INITRD_DIR="${MOCACCINO_INITRD_DIR:-/boot}"
-# Current initrd naming is: initramfs-genkernel-${ARCH}-${KVER}.0-mocaccino
-MOCACCINO_INITRD_PREFIX="${MOCACCINO_INITRD_PREFIX:-initramfs-genkernel}"
+# Current initrd naming is: initramfs-vanilla-${ARCH}-${KVER}-mocaccino
+MOCACCINO_INITRD_PREFIX="${MOCACCINO_INITRD_PREFIX:-initramfs}"
+MOCACCINO_INITRD_SUFFIX="${MOCACCINO_INITRD_SUFFIX:-mocaccino}"
+MOC_DEFAULT_KTYPE="${MOC_DEFAULT_KTYPE:-vanilla}"
 MOC_ARCH=${MOC_ARCH:-$(uname -m)}
 
 _error () {
@@ -25,14 +27,14 @@ _help () {
   echo "
 ------------------------------------
 Mocaccino Dracut Script
-Copyright (s) 2020 Mocaccino
+Copyright (s) 2020-2021 Mocaccino
 ------------------------------------
 
 Usage:
 
 [--rebuild-all]         Rebuild all Mocaccino kernel initrd images.
                         Based on naming convention
-                        ${MOCACCINO_INITRD_PREFIX}-${MOC_ARCH}-VERSION-mocaccino.
+                        ${MOCACCINO_INITRD_PREFIX}-${MOC_DEFAULT_KTYPE}-${MOC_ARCH}-VERSION-${MOCACCINO_INITRD_SUFFIX}.
 [--rebuild|-r vesion]   Rebuild image for a specific version.
 [--list-available|-L]   List available Mocaccino initrd available.
 [--dry-run]             Doesn't execute final rebuild. Only print command
@@ -43,7 +45,7 @@ Usage:
 
 Examples:
 
-\$# mocaccino-dracut --rebuild 5.4
+\$# mocaccino-dracut --rebuild <MAJOR>.<MINOR>.<PATCH>
 
 \$# mocaccino-dracut --list-available
 "
@@ -51,12 +53,12 @@ Examples:
 }
 
 _get_images () {
-  local n=$(ls ${MOCACCINO_INITRD_DIR}/${MOCACCINO_INITRD_PREFIX}*-mocaccino 2>/dev/null | wc -l)
+  local n=$(ls ${MOCACCINO_INITRD_DIR}/${MOCACCINO_INITRD_PREFIX}*-${MOCACCINO_INITRD_SUFFIX} 2>/dev/null | wc -l)
 
   if [ $n = 0 ] ; then
     MOC_INITRD_IMAGES=()
   else
-    MOC_INITRD_IMAGES=( $(ls ${MOCACCINO_INITRD_DIR}/${MOCACCINO_INITRD_PREFIX}*-mocaccino 2>/dev/null) )
+    MOC_INITRD_IMAGES=( $(ls ${MOCACCINO_INITRD_DIR}/${MOCACCINO_INITRD_PREFIX}*-${MOCACCINO_INITRD_SUFFIX} 2>/dev/null) )
   fi
   export MOC_INITRD_IMAGES
 }
@@ -66,21 +68,24 @@ _list () {
   local n_images=${#MOC_INITRD_IMAGES[@]}
   local file
   local version
+  local ktype
 
   if [ "$n_images" = 0 ] ; then
     echo "No images found."
   else
-    echo "======================================================"
+    echo "=============================================================================="
     echo " Initrd Images ${n_images}"
-    echo "======================================================"
-    echo " Version   Image"
-    echo "======================================================"
+    echo "=============================================================================="
+    echo -e " Version\tKernel Type\tImage"
+    echo "=============================================================================="
     for i in ${MOC_INITRD_IMAGES[@]} ; do
       file=$(basename $i)
-      v=${file/${MOCACCINO_INITRD_PREFIX}-${MOC_ARCH}-} ; v=${v/.0-mocaccino/}
-      echo " $v      $file"
+      ktype=$(echo ${file/initramfs-/} | sed -e "s/-${MOC_ARCH}-.*//g")
+      v=$(echo ${file} | sed -e "s/${MOCACCINO_INITRD_PREFIX}-\w*-${MOC_ARCH}-//g")
+      v=${v/-${MOCACCINO_INITRD_SUFFIX}/}
+      echo -e " $v\t${ktype}\t\t${file}"
     done
-    echo "======================================================"
+    echo "=============================================================================="
   fi
 }
 
@@ -88,7 +93,8 @@ _rebuild_all () {
   # Check if version is available
   for i in ${MOC_INITRD_IMAGES[@]} ; do
     file=$(basename $i)
-    v=${file/${MOCACCINO_INITRD_PREFIX}-${MOC_ARCH}-} ; v=${v/.0-mocaccino/}
+    v=$(echo ${file} | sed -e "s/${MOCACCINO_INITRD_PREFIX}-\w*-${MOC_ARCH}-//g")
+    v=${v/-${MOCACCINO_INITRD_SUFFIX}/}
     _rebuild "$v" || {
       echo "Something is wrong with kernel $v but I go ahead."
     }
@@ -99,6 +105,8 @@ _rebuild () {
   local i
   local found=0
   local version=$1
+  local ktype
+  local kernelfile=""
 
   if [ "$(id -u)" != "0" ]; then
     echo "This script must be run as root" 1>&2
@@ -108,19 +116,30 @@ _rebuild () {
   # Check if version is available
   for i in ${MOC_INITRD_IMAGES[@]} ; do
     file=$(basename $i)
-    v=${file/${MOCACCINO_INITRD_PREFIX}-${MOC_ARCH}-} ; v=${v/.0-mocaccino/}
+    ktype=$(echo ${file/initramfs-/} | sed -e "s/-${MOC_ARCH}-.*//g")
+    v=$(echo ${file} | sed -e "s/${MOCACCINO_INITRD_PREFIX}-\w*-${MOC_ARCH}-//g")
+    v=${v/-${MOCACCINO_INITRD_SUFFIX}/}
     if [ "$version" = "$v" ] ; then
       found=1
       break
     fi
   done
 
-  if [[ "$found" = 0 && "${MOC_REBUILD_FORCE}" != 1 ]] ; then
-    echo "No image with version $version found."
+  if [ "$found" = 0 ] ; then
+    if [ "${MOC_REBUILD_FORCE}" != 1 ] ; then
+      echo "No image with version $version found."
+    fi
+    ktype=${MOC_DEFAULT_KTYPE}
   fi
 
-  local image_name="${MOCACCINO_INITRD_PREFIX}-${MOC_ARCH}-${version}.0-mocaccino"
-  local kver="${version}.0-mocaccino"
+  kernelfile="kernel-${ktype}-${MOC_ARCH}-${version}-${MOCACCINO_INITRD_SUFFIX}"
+  if [ ! -e "${MOCACCINO_INITRD_DIR}/${kernelfile}" ] ; then
+    echo "Error: kernel image ${kernelfile} not found."
+    return 1
+  fi
+
+  local image_name="${MOCACCINO_INITRD_PREFIX}-${ktype}-${MOC_ARCH}-${version}-${MOCACCINO_INITRD_SUFFIX}"
+  local kver="${version}-mocaccino"
 
   echo "Building ${MOCACCINO_INITRD_DIR}/${image_name}"
 
