@@ -111,7 +111,8 @@ search_overlay() {
       OVERLAY_MNT=$IMAGE_MNT
       UPPER_DIR=$DEFAULT_UPPER_DIR
       WORK_DIR=$DEFAULT_WORK_DIR
-    
+    else
+      umount $DEVICE
     fi
 
     if [ "$OVERLAY_DIR" != "" -a "$UPPER_DIR" != "" -a "$WORK_DIR" != "" ] ; then
