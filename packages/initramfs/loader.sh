@@ -111,8 +111,6 @@ search_overlay() {
       OVERLAY_MNT=$IMAGE_MNT
       UPPER_DIR=$DEFAULT_UPPER_DIR
       WORK_DIR=$DEFAULT_WORK_DIR
-    else
-      umount -f $DEVICE_MNT
     fi
 
     if [ "$OVERLAY_DIR" != "" -a "$UPPER_DIR" != "" -a "$WORK_DIR" != "" ] ; then
@@ -141,8 +139,8 @@ search_overlay() {
       echo -e "  Device \\e[31m$DEVICE\\e[0m has no proper overlay structure."
     fi
 
-    umount $DEVICE_MNT 2>/dev/null
-    rm -rf $DEVICE_MNT 2>/dev/null
+    # Avoid to run rm -rf if umount fail. We could remove user data.
+    umount -f $DEVICE_MNT && rm -rf $DEVICE_MNT 2>/dev/null
   done
 }
 
