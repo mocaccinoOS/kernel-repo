@@ -77,6 +77,7 @@ search_overlay() {
 
     case $DEV in
       *loop*) continue ;;
+      *ram*) continue ;;
     esac
 
     if [ ! -d "$SYSDEV" ] ; then
