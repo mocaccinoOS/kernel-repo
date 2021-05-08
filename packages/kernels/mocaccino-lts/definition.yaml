@@ -8,8 +8,8 @@ requires:
   - name: "kmod"
     category: "system"
     version: ">=0"
-  - name: "luet-extensions"
-    category: "system"
+  - category: "system"
+    name: "kernel-updater"
     version: ">=0"
 arch: "x86_64"
 prefix: linux
