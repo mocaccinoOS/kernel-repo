@@ -79,8 +79,8 @@ steps:
    xz --check=crc32 -9 --lzma2=dict=1MiB \
       --stdout initramfs.cpio \
       | dd conv=sync bs=512 \
-      of=/boot/{{.Values.name}}-{{.Values.version}}
-- cd /boot/ && ln -s {{.Values.name}}-{{.Values.version}} Initrd
+      of=/boot/initramfs-{{.Values.version}}-mocaccino
+- cd /boot/ && ln -s initramfs-{{.Values.version}}-mocaccino Initrd
 excludes:
 - ^/luetbuild
 - ^/root
