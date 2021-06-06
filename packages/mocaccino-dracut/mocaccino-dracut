@@ -36,19 +36,23 @@ Usage:
 [--rebuild-all]         Rebuild all Mocaccino kernel initrd images.
                         Based on naming convention
                         ${MOCACCINO_INITRD_PREFIX}-${MOC_DEFAULT_KTYPE}-${MOC_ARCH}-VERSION-${MOCACCINO_INITRD_SUFFIX}.
-[--rebuild|-r vesion]   Rebuild image for a specific version.
+[--build|-b version]    Rebuild image for a specific version.
 [--list-available|-L]   List available Mocaccino kernels and initrd images available.
 [--dry-run]             Doesn't execute final rebuild. Only print command
                         execute.
-[--force]               Force creation if doesn't exist.
+[--force]               Force creation of initramfs (required for new initramfs rather than rebuild).
 [--help|-h]             Help message.
 
 
 Examples:
 
-\$# mocaccino-dracut --rebuild <MAJOR>.<MINOR>.<PATCH>
-
 \$# mocaccino-dracut --list-available
+
+\$# mocaccino-dracut --build <MAJOR>.<MINOR>.<PATCH>
+
+\$# mocaccino-dracut --force --build <MAJOR>.<MINOR>.<PATCH>
+
+\$# mocaccino-dracut --rebuild-all
 "
   return 1
 }
@@ -102,7 +106,7 @@ _list () {
       if [ ! -e ${MOCACCINO_INITRD_DIR}/${initrdfile} ] ; then
       	initrdfile="N/A"
       fi
-      echo -e " $v\t${ktype}\t\t${initrdfile}"
+      echo -e " $v  \t${ktype} t\t${initrdfile}"
     done
     echo "=============================================================================="
   fi
@@ -120,7 +124,7 @@ _rebuild_all () {
       file=$(basename $i)
       v=$(echo ${file} | sed -e "s/${MOCACCINO_KERNEL_PREFIX}-\w*-${MOC_ARCH}-//g")
       v=${v/-${MOCACCINO_INITRD_SUFFIX}/}
-      _rebuild "$v" || {
+      _build "$v" || {
         echo "Something is wrong with kernel $v but I go ahead."
       }
     done
@@ -128,7 +132,7 @@ _rebuild_all () {
   return 0
 }
 
-_rebuild () {
+_build () {
   local i
   local found=0
   local version=$1
@@ -155,7 +159,7 @@ _rebuild () {
   done
 
   if [ "$found" = 0 ] ; then
-    if [ "${MOC_REBUILD_FORCE}" != 1 ] ; then
+    if [ "${MOC_BUILD_FORCE}" != 1 ] ; then
       echo "No image with version $version found."
       return 1
     fi
@@ -188,8 +192,8 @@ main () {
     fi
 
     MOC_REBUILD_ALL=0
-    MOC_REBUILD_VERSION=""
-    MOC_REBUILD_FORCE=0
+    MOC_BUILD_VERSION=""
+    MOC_BUILD_FORCE=0
     MOC_INITRD_LIST=0
     MOC_DRYRUN=0
 
@@ -201,8 +205,8 @@ main () {
         --rebuild-all)
           MOC_REBUILD_ALL=1
           ;;
-        --rebuild|-r)
-          MOC_REBUILD_VERSION=$2
+        --build|-b)
+          MOC_BUILD_VERSION=$2
           shift
           ;;
         --list-available|-L)
@@ -212,7 +216,7 @@ main () {
           MOC_DRYRUN=1
           ;;
         --force)
-          MOC_REBUILD_FORCE=1
+          MOC_BUILD_FORCE=1
           ;;
         *|--)
           _error "Invalid parameter $1"
@@ -221,11 +225,11 @@ main () {
       shift
     done
 
-    if [[ "${MOC_REBUILD_ALL}" = 1 && -n "${MOC_REBUILD_VERSION}" ]] ; then
-      _error "Both --rebuild-all and --rebuild options used."
+    if [[ "${MOC_REBUILD_ALL}" = 1 && -n "${MOC_BUILD_VERSION}" ]] ; then
+      _error "Both --rebuild-all and --build options used."
     fi
 
-    export MOC_REBUILD_ALL MOC_REBUILD_VERSION MOC_INITRD_LIST MOC_DRYRUN MOC_REBUILD_FORCE
+    export MOC_REBUILD_ALL MOC_BUILD_VERSION MOC_INITRD_LIST MOC_DRYRUN MOC_BUILD_FORCE
     return 0
   }
 
@@ -236,7 +240,7 @@ main () {
   _get_kernels
 
   [ "${MOC_INITRD_LIST}" = 1 ] && _list
-  [ -n "${MOC_REBUILD_VERSION}" ] && _rebuild "${MOC_REBUILD_VERSION}"
+  [ -n "${MOC_BUILD_VERSION}" ] && _build "${MOC_BUILD_VERSION}"
   [ "${MOC_REBUILD_ALL}" = 1 ] && _rebuild_all
 
   return 0
