@@ -17,7 +17,9 @@ MOCACCINO_INITRD_PREFIX="${MOCACCINO_INITRD_PREFIX:-initramfs}"
 MOCACCINO_KERNEL_PREFIX="${MOCACCINO_KERNEL_PREFIX:-kernel}"
 MOCACCINO_INITRD_SUFFIX="${MOCACCINO_INITRD_SUFFIX:-mocaccino}"
 MOC_DEFAULT_KTYPE="${MOC_DEFAULT_KTYPE:-vanilla}"
+MOCACCINO_RELEASE=$(cat /etc/mocaccino/release)
 MOC_ARCH=${MOC_ARCH:-$(uname -m)}
+export LUET_NOLOCK=true
 
 _error () {
   echo "$@"
@@ -36,19 +38,24 @@ Usage:
 [--rebuild-all]         Rebuild all Mocaccino kernel initrd images.
                         Based on naming convention
                         ${MOCACCINO_INITRD_PREFIX}-${MOC_DEFAULT_KTYPE}-${MOC_ARCH}-VERSION-${MOCACCINO_INITRD_SUFFIX}.
-[--rebuild|-r vesion]   Rebuild image for a specific version.
+[--build|-b version]    Rebuild image for a specific version.
 [--list-available|-L]   List available Mocaccino kernels and initrd images available.
 [--dry-run]             Doesn't execute final rebuild. Only print command
                         execute.
-[--force]               Force creation if doesn't exist.
+[--force]               Force creation of initramfs.
+			(required for new or non-existent initramfs)
 [--help|-h]             Help message.
 
 
 Examples:
 
-\$# mocaccino-dracut --rebuild <MAJOR>.<MINOR>.<PATCH>
-
 \$# mocaccino-dracut --list-available
+
+\$# mocaccino-dracut --build <MAJOR>.<MINOR>.<PATCH>
+
+\$# mocaccino-dracut --force --build <MAJOR>.<MINOR>.<PATCH>
+
+\$# mocaccino-dracut --rebuild-all
 "
   return 1
 }
@@ -88,7 +95,7 @@ _list () {
     echo "=============================================================================="
     echo " Kernels Available: ${n_kernels}"
     echo "=============================================================================="
-    echo -e " Version\tKernel Type\tImage Initrd"
+    echo -e " Version  \tKernel Type \tImage Initrd"
     echo "=============================================================================="
     for i in ${MOC_KERNELS[@]} ; do
       file=$(basename $i)
@@ -102,7 +109,7 @@ _list () {
       if [ ! -e ${MOCACCINO_INITRD_DIR}/${initrdfile} ] ; then
       	initrdfile="N/A"
       fi
-      echo -e " $v\t${ktype}\t\t${initrdfile}"
+      echo -e " $v  \t${ktype} \t${initrdfile}"
     done
     echo "=============================================================================="
   fi
@@ -120,7 +127,7 @@ _rebuild_all () {
       file=$(basename $i)
       v=$(echo ${file} | sed -e "s/${MOCACCINO_KERNEL_PREFIX}-\w*-${MOC_ARCH}-//g")
       v=${v/-${MOCACCINO_INITRD_SUFFIX}/}
-      _rebuild "$v" || {
+      _build "$v" || {
         echo "Something is wrong with kernel $v but I go ahead."
       }
     done
@@ -128,7 +135,7 @@ _rebuild_all () {
   return 0
 }
 
-_rebuild () {
+_build () {
   local i
   local found=0
   local version=$1
@@ -155,7 +162,7 @@ _rebuild () {
   done
 
   if [ "$found" = 0 ] ; then
-    if [ "${MOC_REBUILD_FORCE}" != 1 ] ; then
+    if [ "${MOC_BUILD_FORCE}" != 1 ] ; then
       echo "No image with version $version found."
       return 1
     fi
@@ -180,66 +187,157 @@ _rebuild () {
   fi
 }
 
+_build_micro_test () {
+    echo "Generating initramfs and grub setup"
+
+    BOOTDIR=/boot
+    CURRENT_KERNEL=$(ls ${MOCACCINO_TARGET}$BOOTDIR/kernel-* | head -n1)
+    echo "CURRENT_KERNEL= ${CURRENT_KERNEL}"
+
+    # Try to grab current kernel package name, excluding modules
+
+    CURRENT_KERNEL_PACKAGE_NAME=$(luet search --installed kernel --output json | jq -r '.packages[] | select( .category == "kernel" ) | select( .name | test("modules") | not).name')
+    echo "CURRENT_KERNEL_PACKAGE_NAME= ${CURRENT_KERNEL_PACKAGE_NAME}"
+
+    MINIMAL_NAME="${CURRENT_KERNEL_PACKAGE_NAME/full/minimal}"
+    echo "MINIMAL_NAME= ${MINIMAL_NAME}"
+
+    export INITRAMFS_PACKAGES="${INITRAMFS_PACKAGES:-utils/busybox kernel/$MINIMAL_NAME system/mocaccino-init system/mocaccino-live-boot init/mocaccino-skel system/kmod}"
+    echo "INITRAMFS_PACKAGES= ${INITRAMFS_PACKAGES}"
+
+    export KERNEL_GRUB=${CURRENT_KERNEL/${BOOTDIR}/}
+    echo "KERNEL_GRUB= ${KERNEL_GRUB}"
+
+    export INITRAMFS=${CURRENT_KERNEL/kernel/initramfs}
+    echo "INITRAMFS= ${INITRAMFS}"
+
+    export INITRAMFS_GRUB=${INITRAMFS/${BOOTDIR}/}
+    echo "INITRAMFS_GRUB= ${INITRAMFS_GRUB}"
+    exit 0
+}
+
+_build_micro () {
+    echo "Generating initramfs and grub setup"
+
+    BOOTDIR=/boot
+    CURRENT_KERNEL=$(ls ${MOCACCINO_TARGET}$BOOTDIR/kernel-* | head -n1)
+
+    # Try to grab current kernel package name, excluding modules
+    CURRENT_KERNEL_PACKAGE_NAME=$(luet search --installed kernel --output json | jq -r '.packages[] | select( .category == "kernel" ) | select( .name | test("modules") | not).name')
+    MINIMAL_NAME="${CURRENT_KERNEL_PACKAGE_NAME/full/minimal}"
+    export INITRAMFS_PACKAGES="${INITRAMFS_PACKAGES:-utils/busybox kernel/$MINIMAL_NAME system/mocaccino-init system/mocaccino-live-boot init/mocaccino-skel system/kmod}"
+
+    export KERNEL_GRUB=${CURRENT_KERNEL/${BOOTDIR}/}
+    export INITRAMFS=${CURRENT_KERNEL/kernel/initramfs}
+    export INITRAMFS_GRUB=${INITRAMFS/${BOOTDIR}/}
+
+    luet geninitramfs "${INITRAMFS_PACKAGES}"
+    pushd /boot/
+    rm -rf Initrd bzImage
+    ln -s ${KERNEL_GRUB#/} bzImage
+    ln -s ${INITRAMFS_GRUB#/} Initrd
+    popd
+
+    mkdir -p /boot/grub
+
+    root=$(cat /boot/grub/grub.cfg | grep -Eo "root=(.*)")
+    cat > /boot/grub/grub.cfg << EOF
+set default=0
+set timeout=10
+set gfxmode=auto
+set gfxpayload=keep
+insmod all_video
+insmod gfxterm
+menuentry "MocaccinoOS" {
+    linux /$KERNEL_GRUB ${root}
+    initrd /$INITRAMFS_GRUB
+}
+EOF
+
+    GRUB_TARGET=
+    if [ -e "/sys/firmware/efi" ]; then
+        GRUB_TARGET="--target=x86_64-efi --efi-dir=/boot/efi"
+    fi
+    echo "GRUB_CMDLINE_LINUX_DEFAULT=\"${root}\"" > /etc/default/grub
+    # grub-mkconfig -o /boot/grub/grub.cfg
+    install_dev=${root/root=/}
+    install_dev=$(printf '%s' "$install_dev" | tr -d '0123456789')
+    grub-install ${GRUB_TARGET} $install_dev
+    exit 0
+}
+
 main () {
-  _parse_args() {
-    if [ $# -lt 1 ] ; then
-      _help
-      return 1
-    fi
+  case "$MOCACCINO_RELEASE" in
+    "micro")
+      echo "micro release found: bypassing dracut"
+      _build_micro_test
+      ;;
+    *"embedded")
+      echo "Nothing to do" && exit 0
+      ;;
+    "desktop")
+      _parse_args() {
+      if [ $# -lt 1 ] ; then
+        _help
+        return 1
+      fi
+  
+      MOC_REBUILD_ALL=0
+      MOC_BUILD_VERSION=""
+      MOC_BUILD_FORCE=0
+      MOC_INITRD_LIST=0
+      MOC_DRYRUN=0
+  
+      while [ $# -gt 0 ] ; do
+        case "$1" in
+          --help|-h)
+            _help || return 1
+            ;;
+          --rebuild-all)
+            MOC_REBUILD_ALL=1
+            ;;
+          --build|-b)
+            MOC_BUILD_VERSION=$2
+            shift
+            ;;
+          --list-available|-L)
+            MOC_INITRD_LIST=1
+            ;;
+          --dry-run)
+            MOC_DRYRUN=1
+            ;;
+          --force)
+            MOC_BUILD_FORCE=1
+            ;;
+          *|--)
+            _error "Invalid parameter $1"
+            ;;
+        esac
+        shift
+      done
+  
+      if [[ "${MOC_REBUILD_ALL}" = 1 && -n "${MOC_BUILD_VERSION}" ]] ; then
+        _error "Both --rebuild-all and --build options used."
+      fi
 
-    MOC_REBUILD_ALL=0
-    MOC_REBUILD_VERSION=""
-    MOC_REBUILD_FORCE=0
-    MOC_INITRD_LIST=0
-    MOC_DRYRUN=0
+      export MOC_REBUILD_ALL MOC_BUILD_VERSION MOC_INITRD_LIST MOC_DRYRUN MOC_BUILD_FORCE
+      return 0
+    }
 
-    while [ $# -gt 0 ] ; do
-      case "$1" in
-        --help|-h)
-          _help || return 1
-          ;;
-        --rebuild-all)
-          MOC_REBUILD_ALL=1
-          ;;
-        --rebuild|-r)
-          MOC_REBUILD_VERSION=$2
-          shift
-          ;;
-        --list-available|-L)
-          MOC_INITRD_LIST=1
-          ;;
-        --dry-run)
-          MOC_DRYRUN=1
-          ;;
-        --force)
-          MOC_REBUILD_FORCE=1
-          ;;
-        *|--)
-          _error "Invalid parameter $1"
-          ;;
-      esac
-      shift
-    done
+    _parse_args "$@"
 
-    if [[ "${MOC_REBUILD_ALL}" = 1 && -n "${MOC_REBUILD_VERSION}" ]] ; then
-      _error "Both --rebuild-all and --rebuild options used."
-    fi
+    unset -f _parse_args
 
-    export MOC_REBUILD_ALL MOC_REBUILD_VERSION MOC_INITRD_LIST MOC_DRYRUN MOC_REBUILD_FORCE
+    _get_kernels
+
+    [ "${MOC_INITRD_LIST}" = 1 ] && _list
+    [ -n "${MOC_BUILD_VERSION}" ] && _build "${MOC_BUILD_VERSION}"
+    [ "${MOC_REBUILD_ALL}" = 1 ] && _rebuild_all
+  
+    #Safely Build Grub config after initramfs update/creation
+    grub-mkconfig -o /boot/grub/grub.cfg
     return 0
-  }
-
-  _parse_args "$@"
-
-  unset -f _parse_args
-
-  _get_kernels
-
-  [ "${MOC_INITRD_LIST}" = 1 ] && _list
-  [ -n "${MOC_REBUILD_VERSION}" ] && _rebuild "${MOC_REBUILD_VERSION}"
-  [ "${MOC_REBUILD_ALL}" = 1 ] && _rebuild_all
-
-  return 0
+  esac
 }
 
 main $@
