@@ -14,6 +14,7 @@ jobs:
       MINIO_API_URL: ${{ secrets.MINIO_API_URL }}
       MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
       MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+      NODE_SELECTOR: "luet.io/workload: jobs"
       IMAGE_REPOSITORY: quay.io/mocaccinocache/kernel-repo-amd64-cache
       BUCKET: mocaccino-kernel
       NAMESPACE: workload-mocaccino-kernel-repo
