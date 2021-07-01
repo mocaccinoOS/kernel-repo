@@ -5,6 +5,10 @@ kernelprefix: kernel-vanilla
 arch: "x86_64"
 suffix: mocaccino
 prefix: linux
+requires:
+  - category: mocaccino
+    name: cli
+    version: ">=0"
 labels:
   autobump.revdeps: "false"
   autobump.string_replace: '{ "prefix": "" }'
