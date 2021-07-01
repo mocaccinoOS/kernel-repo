@@ -1,2 +1,2 @@
 install:
-- ln -s /boot/kernel-* /boot/bzImage || true
+- mos kernel gi --all --set-links --purge || true
