@@ -1,5 +1,3 @@
 install:
 - depmod -a {{ index .Values.labels "package.version" }}-mocaccino || true
-- rm -rf /boot/bzImage || true
-- cd /boot && ln -s kernel-* bzImage
-- kernel-updater || true
+- mos kernel gi --set-links --grub --purge --all || true
