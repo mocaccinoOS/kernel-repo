@@ -8,8 +8,8 @@ requires:
   - name: "kmod"
     category: "system"
     version: ">=0"
-  - category: "system"
-    name: "kernel-updater"
+  - category: "mocaccino"
+    name: "cli"
     version: ">=0"
 arch: "x86_64"
 prefix: linux

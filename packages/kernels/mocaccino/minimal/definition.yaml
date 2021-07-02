@@ -4,6 +4,10 @@ version: "5.12.13"
 kernelprefix: kernel-vanilla
 suffix: mocaccino
 arch: "x86_64"
+requires:
+  - category: "mocaccino"
+    name: "cli"
+    version: ">=0"
 labels:
   autobump.revdeps: "false"
   autobump.string_replace: '{ "prefix": "" }'
