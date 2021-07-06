@@ -1,2 +1,2 @@
 install:
-- mos kernel gi --all --set-links --purge || true
+- PATH="/bin:/sbin:/usr/bin:/usr/sbin" mos kernel gi --set-links --grub --purge --all || true
