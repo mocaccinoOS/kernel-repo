@@ -1,3 +1,3 @@
 install:
 - depmod -a {{ index .Values.labels "package.version" }}-mocaccino || true
-- mos kernel gi --all --grub --purge --set-links || true
+- PATH="/bin:/sbin:/usr/bin:/usr/sbin" mos kernel gi --set-links --grub --purge --all || true
