@@ -1,2 +1,2 @@
 install:
-- PATH="/bin:/sbin:/usr/bin:/usr/sbin" mos kernel gi --set-links --grub --purge --all || true
+- kernel-updater || true
