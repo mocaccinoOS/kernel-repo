@@ -14,7 +14,7 @@ jobs:
       MINIO_API_URL: ${{ secrets.MINIO_API_URL }}
       MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
       MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
-      NODE_SELECTOR: "luet.io/workload: jobs"
+#      NODE_SELECTOR: "luet.io/workload: jobs"
       IMAGE_REPOSITORY: quay.io/mocaccinocache/kernel-repo-amd64-cache
       BUCKET: mocaccino-kernel
       NAMESPACE: workload-mocaccino-kernel-repo
@@ -23,6 +23,9 @@ jobs:
       DOCKER_REGISTRY: quay.io
       DOCKER_USER: ${{ secrets.QUAY_USERNAME }}
       DOCKER_PASS: ${{ secrets.QUAY_PASSWORD }}
+      EDGEVPN: ${{ secrets.EDGEVPN }}
+      MASTER: 10.1.0.20
+      ADDRESS: "10.1.0.202/24"
     steps:
     - uses: actions/checkout@v2
     - uses: fkirc/skip-duplicate-actions@master
@@ -36,10 +39,17 @@ jobs:
         sudo curl https://raw.githubusercontent.com/Luet-lab/extensions/master/extensions/k8s-build-scheduler/luet-k8s-build-scheduler -o /usr/bin/luet-k8s-build-scheduler
     - name: Build repository 🔧
       run: |
-        export KUBECONFIG=$GITHUB_WORKSPACE/kubeconfig
+        if [ -z "$EDGEVPN" ]; then
+          export KUBECONFIG=$GITHUB_WORKSPACE/kubeconfig
+          echo "$ENCODED_KUBECONFIG" | base64 -d > $KUBECONFIG
+        else
+          source .github/helpers.sh
+          start_vpn
+          prepare_jumpbox
+          export KUBECONFIG=$PWD/k3s.yaml
+        fi
         export REF=$GITHUB_SHA
         export GITHUB_REPO=$GITHUB_REPOSITORY
-        echo "$ENCODED_KUBECONFIG" | base64 -d > $KUBECONFIG
         kubectl create namespace $NAMESPACE || true
         luet k8s-build-scheduler
     - name: Create repository 🔧
