@@ -57,6 +57,9 @@ jobs:
         # tree: packages
         build: true
         FINAL_REPO: quay.io/mocaccino/kernel
+        DOCKER_USERNAME: ${{ secrets.QUAY_ROBOT_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.QUAY_ROBOT_PASSWORD }}
+        DOCKER_ENDPOINT: quay.io
         onlyMissing: true
         pushCache: true
         CURRENT_PACKAGE:  ${{ matrix.category }}/${{ matrix.name }}@${{ matrix.version }}
@@ -103,6 +106,9 @@ jobs:
       uses: mudler/luet-github-action@master
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
       with:
+        DOCKER_USERNAME: ${{ secrets.QUAY_ROBOT_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.QUAY_ROBOT_PASSWORD }}
+        DOCKER_ENDPOINT: quay.io
         # tree: packages
         createRepo: true
         pushCache: true
