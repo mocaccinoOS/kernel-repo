@@ -39,7 +39,7 @@ jobs:
         git fetch --prune --unshallow
     - name: Login to Quay Registry
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-      run: echo ${{ secrets.QUAY_ROBOT_PASSWORD }} | docker login -u ${{ secrets.QUAY_ROBOT_USERNAME }} --password-stdin quay.io   
+      run: echo ${{ secrets.QUAY_ROBOT_PASSWORD }} | sudo docker login -u ${{ secrets.QUAY_ROBOT_USERNAME }} --password-stdin quay.io   
     - name: Build 🔧
       uses: mudler/luet-github-action@master
       if: ${{ github.event_name == 'push' && github.ref != 'refs/heads/master' }}
