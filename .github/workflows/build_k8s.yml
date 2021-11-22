@@ -52,7 +52,7 @@ jobs:
         CURRENT_PACKAGE:  ${{ matrix.category }}/${{ matrix.name }}@${{ matrix.version }}
     - name: Build 🔧
       uses: mudler/luet-github-action@master
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/master' ) || startsWith(github.ref, 'refs/tags/') }}
       with:
         # tree: packages
         build: true
